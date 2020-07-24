@@ -6,12 +6,12 @@ import java.util.Objects;
 public class Tsetaf {
     private HashSet<Argument> setOfArguments;
     private HashMap<String,HashSet<Argument>> mapOfRelation;
-    private HashMap<String,ArrayList<Availability_interval>> mapOfTime;
+    private HashSet<ArrayList<Availability_interval>> setOfTime;
 
     public Tsetaf(){
         this.setOfArguments = new HashSet<>();
         this.mapOfRelation = new HashMap<>();
-        this.mapOfTime = new HashMap<>();
+        this.setOfTime = new HashSet<>();
     }
 
 
@@ -21,8 +21,7 @@ public class Tsetaf {
         this.mapOfRelation = mapOfRelation;
         this.mapOfTime = mapOfTime;
     }
-
-     */
+    */
 
     public void addArgument(Argument argument){
         setOfArguments.add(argument);
@@ -31,7 +30,13 @@ public class Tsetaf {
         mapOfRelation.put(relation.getName(),relation.getSetOfAttacker());
     }
     public void addTime(Time_list time_list){
-        mapOfTime.put(time_list.getName(),time_list.getTime_list());
+        setOfTime.add(time_list.getTime_list());
+    }
+
+    public Tsetaf(HashSet<Argument> setOfArguments, HashMap<String, HashSet<Argument>> mapOfRelation, HashSet<ArrayList<Availability_interval>> setOfTime) {
+        this.setOfArguments = setOfArguments;
+        this.mapOfRelation = mapOfRelation;
+        this.setOfTime = setOfTime;
     }
 
     public HashSet<Argument> getSetOfArguments() {
@@ -50,12 +55,12 @@ public class Tsetaf {
         this.mapOfRelation = mapOfRelation;
     }
 
-    public HashMap<String, ArrayList<Availability_interval>> getMapOfTime() {
-        return mapOfTime;
+    public HashSet<ArrayList<Availability_interval>> getSetOfTime() {
+        return setOfTime;
     }
 
-    public void setMapOfTime(HashMap<String, ArrayList<Availability_interval>> mapOfTime) {
-        this.mapOfTime = mapOfTime;
+    public void setSetOfTime(HashSet<ArrayList<Availability_interval>> setOfTime) {
+        this.setOfTime = setOfTime;
     }
 
     @Override
@@ -65,12 +70,12 @@ public class Tsetaf {
         Tsetaf tsetaf = (Tsetaf) o;
         return Objects.equals(setOfArguments, tsetaf.setOfArguments) &&
                 Objects.equals(mapOfRelation, tsetaf.mapOfRelation) &&
-                Objects.equals(mapOfTime, tsetaf.mapOfTime);
+                Objects.equals(setOfTime, tsetaf.setOfTime);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(setOfArguments, mapOfRelation, mapOfTime);
+        return Objects.hash(setOfArguments, mapOfRelation, setOfTime);
     }
 
     @Override
@@ -78,7 +83,7 @@ public class Tsetaf {
         return "Tsetaf{" +
                 "setOfArguments=" + setOfArguments +
                 ", mapOfRelation=" + mapOfRelation +
-                ", mapOfTime=" + mapOfTime +
+                ", setOfTime=" + setOfTime +
                 '}';
     }
 }

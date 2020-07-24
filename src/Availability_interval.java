@@ -6,9 +6,9 @@ public class Availability_interval {
     /*
     type:0();1(];2[];3[)
     */
-    private Integer type;
+    private int type;
 
-    public Availability_interval(int start_point, int end_point, Integer type) {
+    public Availability_interval(int start_point, int end_point, int type) {
         this.start_point = start_point;
         this.end_point = end_point;
         this.type = type;
@@ -30,11 +30,11 @@ public class Availability_interval {
         this.end_point = end_point;
     }
 
-    public Integer getType() {
+    public int getType() {
         return type;
     }
 
-    public void setType(Integer type) {
+    public void setType(int type) {
         this.type = type;
     }
 
