@@ -5,63 +5,51 @@ import java.util.Objects;
 
 public class Tsetaf {
     private HashSet<Argument> setOfArguments;
-    private HashMap<String,HashSet<Argument>> mapOfRelation;
-    private HashSet<ArrayList<Availability_interval>> setOfTime;
+    private HashSet<Relation> mapOfRelation;
+    private HashMap<Argument,Time_list> setOfTime;
+
 
     public Tsetaf(){
         this.setOfArguments = new HashSet<>();
-        this.mapOfRelation = new HashMap<>();
-        this.setOfTime = new HashSet<>();
+        this.mapOfRelation = new HashSet<>();
+        this.setOfTime = new HashMap<>();
     }
 
-
-    /*
-    public Tsetaf(HashSet<Argument> setOfArguments, HashMap<String, HashSet<Argument>> mapOfRelation, HashMap<String, ArrayList<Availability_interval>> mapOfTime) {
-        this.setOfArguments = setOfArguments;
-        this.mapOfRelation = mapOfRelation;
-        this.mapOfTime = mapOfTime;
-    }
-    */
 
     public void addArgument(Argument argument){
         setOfArguments.add(argument);
     }
+
     public void addRelation(Relation relation){
-        mapOfRelation.put(relation.getName(),relation.getSetOfAttacker());
+        mapOfRelation.add(relation);
     }
-    public void addTime(Time_list time_list){
-        setOfTime.add(time_list.getTime_list());
+    public void addTime(Argument a, Time_list time_list)
+    {
+        setOfTime.put(a, time_list);
     }
 
-    public Tsetaf(HashSet<Argument> setOfArguments, HashMap<String, HashSet<Argument>> mapOfRelation, HashSet<ArrayList<Availability_interval>> setOfTime) {
-        this.setOfArguments = setOfArguments;
-        this.mapOfRelation = mapOfRelation;
-        this.setOfTime = setOfTime;
+    public void addAvailabilityInterval(Argument a, Availability_interval b)
+    {
+        if(setOfTime.get(a) == null)
+            setOfTime.put(a, new Time_list());
+        setOfTime.get(a).getTime_list().add(b);
     }
+
+
 
     public HashSet<Argument> getSetOfArguments() {
         return setOfArguments;
     }
 
-    public void setSetOfArguments(HashSet<Argument> setOfArguments) {
-        this.setOfArguments = setOfArguments;
-    }
-
-    public HashMap<String, HashSet<Argument>> getMapOfRelation() {
+    public HashSet<Relation> getMapOfRelation() {
         return mapOfRelation;
     }
 
-    public void setMapOfRelation(HashMap<String, HashSet<Argument>> mapOfRelation) {
-        this.mapOfRelation = mapOfRelation;
-    }
 
-    public HashSet<ArrayList<Availability_interval>> getSetOfTime() {
+    public HashMap<Argument, Time_list> getSetOfTime() {
         return setOfTime;
     }
 
-    public void setSetOfTime(HashSet<ArrayList<Availability_interval>> setOfTime) {
-        this.setOfTime = setOfTime;
-    }
 
     @Override
     public boolean equals(Object o) {
@@ -80,11 +68,10 @@ public class Tsetaf {
 
     @Override
     public String toString() {
-        return "Tsetaf{" +
+        return "Tsetaf:\n" +
                 "setOfArguments=" + setOfArguments +
-                ", mapOfRelation=" + mapOfRelation +
-                ", setOfTime=" + setOfTime +
-                '}';
+                "\nmapOfRelation=" + mapOfRelation +
+                "\nsetOfTime=" + setOfTime;
     }
 }
 

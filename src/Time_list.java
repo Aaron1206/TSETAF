@@ -5,8 +5,17 @@ public class Time_list {
 
     private ArrayList<Availability_interval> time_list;
 
+    public Time_list() {
+        this.time_list = new ArrayList<Availability_interval>();
+    }
+
+
     public Time_list(ArrayList<Availability_interval> time_list) {
         this.time_list = time_list;
+    }
+
+    public void add(Availability_interval toadd){
+        this.time_list.add(toadd);
     }
 
     public ArrayList<Availability_interval> getTime_list() {
@@ -19,9 +28,7 @@ public class Time_list {
 
     @Override
     public String toString() {
-        return "Time_list{" +
-                "time_list=" + time_list +
-                '}';
+        return time_list.toString();
     }
 
     @Override

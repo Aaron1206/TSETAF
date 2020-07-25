@@ -2,20 +2,20 @@ import java.util.HashSet;
 import java.util.Objects;
 
 public class Relation {
-    private String name;
+    private Argument attacked;
     private HashSet<Argument> setOfAttacker;
 
-    public Relation(String name, HashSet<Argument> setOfAttacker) {
-        this.name = name;
+    public Relation(Argument a, HashSet<Argument> setOfAttacker) {
+        this.attacked = a;
         this.setOfAttacker = setOfAttacker;
     }
 
-    public String getName() {
-        return name;
+    public Argument getAttacked() {
+        return attacked;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setAttcked(Argument a) {
+        this.attacked = a;
     }
 
     public HashSet<Argument> getSetOfAttacker() {
@@ -31,21 +31,18 @@ public class Relation {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Relation relation = (Relation) o;
-        return Objects.equals(name, relation.name) &&
+        return Objects.equals(attacked, relation.attacked) &&
                 Objects.equals(setOfAttacker, relation.setOfAttacker);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(name, setOfAttacker);
+        return Objects.hash(attacked, setOfAttacker);
     }
 
     @Override
     public String toString() {
-        return "Relation{" +
-                "name='" + name + '\'' +
-                ", setOfAttacker=" + setOfAttacker +
-                '}';
+        return  attacked + "<--" + setOfAttacker;
     }
 
 

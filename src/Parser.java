@@ -2,6 +2,7 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -14,9 +15,9 @@ public class Parser {
         try {
             br = new BufferedReader(new FileReader(file));
             String st = "";
-            HashSet<String> arguments = new HashSet<>();
-            HashMap<String, String> AttacksBuilder = new HashMap<>();
-            HashMap<String, HashSet<String>> Relation = new HashMap<>();
+            HashSet<String> arguments = new HashSet<>(); //a, b, c,d
+            HashMap<String, String> AttacksBuilder = new HashMap<>(); //{ r1: b, r2: c, ... }
+            HashMap<String, HashSet<String>> Relation = new HashMap<>();  //{ r4: [b ,c ], r1 : [a], .... }
             HashMap<String, String> Argument_time = new HashMap<>();
             HashMap<String,Time_list> Timelist = new HashMap<>();
 
@@ -27,98 +28,124 @@ public class Parser {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-                //System.out.println(st);
 
-
+                //The REGEX
                 String regexarg = "arg\\(\\s*([a-z,0-9,A-Z]+)\\s*\\)";
                 String regextime_list = "time_list\\(\\s*([a-z,0-9,A-Z]+)\\s*,\\s*([a-z,0-9,A-Z]+)\\s*\\)";
                 String regexmem1 = "mem1\\(\\s*([a-z,0-9,A-Z]+)\\s*,\\s*(\\(|\\[)\\s*([0-9]+)\\s*,\\s*([0-9]+)\\s*(\\)|\\])\\s*\\)";
                 String regexatt = "att\\(\\s*([a-z,0-9,A-Z]+)\\s*,\\s*([a-z,0-9,A-Z]+)\\s*\\)";
                 String regexmem2 = "mem2\\(\\s*([a-z,0-9,A-Z]+)\\s*,\\s*([a-z,0-9,A-Z]+)\\s*\\)";
-                //String regexav = "av\\(\\s*([a-z,A-Z]+)\\s*\\)\\s*=\\s*(\\(|\\[)\\s*([0-9]+)\\s*,\\s*([0-9]+)\\s*(\\)|\\])\\s*|U\\s*(\\(|\\[)\\s*([0-9]+)\\s*,\\s*([0-9]+)\\s*(\\)|\\])";
-                //String regexmem ="mem\\(\\s*([a-z,0-9,A-Z]+)\\s*,\\s*([a-z,0-9,A-Z]+)\\s*|\\s*(\\(|\\[)\\s*([0-9]+)\\s*,\\s*([0-9]+)\\s*(\\)|\\])\\s*\\)";
 
-
+                //The pattern matchers
                 Pattern patternarg = Pattern.compile(regexarg);
                 Pattern patterntime_list = Pattern.compile(regextime_list);
                 Pattern patternmem1 = Pattern.compile(regexmem1);
                 Pattern patternatt = Pattern.compile(regexatt);
                 Pattern patternmem2 = Pattern.compile(regexmem2);
-                //Pattern patternav = Pattern.compile(regexav);
 
+
+                //We recognise the arguments
                 Matcher matcher = patternarg.matcher(st);
                 while (matcher.find()){
                     arguments.add(matcher.group(1));
                 }
-                //System.out.println(arguments);
 
-
+                //We recognise the Availability interval names
                 matcher = patterntime_list.matcher(st);
-                //int groupCount1 = matcher.groupCount();
                 while (matcher.find()){
-                   // for (int i = 0; i <= groupCount1; i++) {
-                        // Group i substring
-                       // System.out.println("Group " + i + ": " + matcher.group(i));
                     Argument_time.put(matcher.group(1),matcher.group(2));
-                    }
-                //System.out.println(Argument_time);
+                }
 
+                //We recognise the Availability interval content
                 matcher = patternmem1.matcher(st);
-                //int groupCount2 = matcher.groupCount();
-                while (matcher.find()){
-                    //for (int i = 0; i <= groupCount2; i++) {
-                        // Group i substring
-                    //    System.out.println("Group " + i + ": " + matcher.group(i));
-                   // }
+                while (matcher.find()) {
+
                     int flag = 0;
-                    if (matcher.group(2)=="("&&matcher.group(5)==")"){
+                    if (matcher.group(2) == "(" && matcher.group(5) == ")") {
                         flag = 0;
-                    }else if (matcher.group(2)=="("&&matcher.group(5)=="]"){
+                    } else if (matcher.group(2) == "(" && matcher.group(5) == "]") {
                         flag = 1;
-                    }else if (matcher.group(2)=="["&&matcher.group(5)=="]"){
+                    } else if (matcher.group(2) == "[" && matcher.group(5) == "]") {
                         flag = 2;
-                    }else if (matcher.group(2)=="["&&matcher.group(5)=="]"){
+                    } else if (matcher.group(2) == "[" && matcher.group(5) == "]") {
                         flag = 3;
                     }
-                    Availability_interval availability_interval = new Availability_interval(Integer.parseInt(matcher.group(3)),Integer.parseInt(matcher.group(4)),flag);
-                    ArrayList<Availability_interval> availability_intervalArrayList = new ArrayList<>();
-                    availability_intervalArrayList.add(availability_interval);
-                    Time_list time_list = new Time_list(availability_intervalArrayList);
-                    Timelist.put(matcher.group(1),time_list);
-                }
-                //System.out.println(Timelist);
 
+                    Availability_interval availability_interval = new Availability_interval(Integer.parseInt(matcher.group(3)), Integer.parseInt(matcher.group(4)), flag);
+
+                    if (Timelist.get(matcher.group(1)) == null)
+                        Timelist.put(matcher.group(1), new Time_list());
+
+                    if (!Timelist.get(matcher.group(1)).getTime_list().contains(availability_interval))
+                        Timelist.get(matcher.group(1)).getTime_list().add(availability_interval);
+                }
+
+                //We recognise the attack names
                 matcher = patternatt.matcher(st);
-                int groupCount = matcher.groupCount();
                 while (matcher.find()) {
-                    for (int i = 0; i <= groupCount; i++) {
-                        System.out.println("Group " + i + ": " + matcher.group(i));
-                    }
-                    //group(1) is r, group(2) is attacked
                     AttacksBuilder.put(matcher.group(1),matcher.group(2));
                 }
 
+                //We recognise the attack content
                 matcher = patternmem2.matcher(st);
-                //int groupCount = matcher.groupCount();
                 while (matcher.find()){
-                    // for (int i = 0; i <= groupCount ; i++) {
-                    //    System.out.println("Group " + i + ": " + matcher.group(i));
-                    // }
-                    HashSet<String> attackerSet = new HashSet<>();
-                    System.out.println("attacker:"+matcher.group(2));
-                    attackerSet.add(matcher.group(2));
-                    String attacked = AttacksBuilder.get(matcher.group(1));// according to key r get value attacked
-                    System.out.println("attacked:"+attacked);
-                    Relation.put(attacked,attackerSet);
+
+                    if(Relation.get(matcher.group(1)) == null){
+                        Relation.put(matcher.group(1), new HashSet<String>());
+                    }
+                    Relation.get(matcher.group(1)).add(matcher.group(2));
                 }
             }
 
+            // We create the arguments
+            for(String s : arguments)
+            {
+                TAF.addArgument(new Argument(s));
+            }
 
-            System.out.println(AttacksBuilder);// r = c means r attacks c
-            System.out.println(Relation);
+            //We create the relations
+            for(String s : AttacksBuilder.keySet()){
+                if(arguments.contains(AttacksBuilder.get(s))){
+                    if(arguments.containsAll(Relation.get(s))){
+
+                        TAF.addRelation(new Relation(F(AttacksBuilder.get(s),TAF.getSetOfArguments()),F(Relation.get(s), TAF.getSetOfArguments())));
+
+
+                    }
+                }
+            }
+
+            //We associate the time to the arguments
+            for(String s : Argument_time.keySet()){
+                TAF.addTime(F(s, TAF.getSetOfArguments()), Timelist.get(Argument_time.get(s)));
+            }
+
+
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
         return TAF;
     }
+
+    public HashSet<Argument> F(HashSet<String> S, HashSet<Argument> SA){
+        HashSet<Argument> result = new HashSet<>();
+        Iterator<Argument> iter = SA.iterator();
+        while(iter.hasNext()){
+            Argument a = iter.next();
+            if(S.contains(a.getName()))
+                result.add(a);
+        }
+        return result;
+    }
+
+    public Argument F(String s, HashSet<Argument> SA){
+        Iterator<Argument> iter = SA.iterator();
+        while(iter.hasNext()){
+            Argument a = iter.next();
+            if(s.equals(a.getName()))
+                return a;
+        }
+        return null;
+    }
+
 }

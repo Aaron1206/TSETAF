@@ -55,10 +55,7 @@ public class Availability_interval {
 
     @Override
     public String toString() {
-        return "Availability_interval{" +
-                "start_point=" + start_point +
-                ", end_point=" + end_point +
-                ", type=" + type +
-                '}';
+        return ((type == 0 | type == 1)? "(" : "[" )+
+                start_point + "," + end_point + ((type == 0 | type == 3)? ")": "]");
     }
 }
