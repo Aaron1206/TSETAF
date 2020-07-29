@@ -1,9 +1,13 @@
+import org.graphstream.graph.Graph;
+import org.graphstream.graph.implementations.SingleGraph;
+
 import java.util.*;
 
 public class Tsetaf {
     private HashSet<Argument> setOfArguments;
     private HashSet<Relation> mapOfRelation;
     private HashMap<Argument, Time_list> setOfTime;
+    Graph graph = new SingleGraph("Tsetaf");
 
 
     public Tsetaf() {
@@ -23,6 +27,22 @@ public class Tsetaf {
 
     public void addTime(Argument a, Time_list time_list) {
         setOfTime.put(a, time_list);
+    }
+
+    public Graph showTsetaf(Tsetaf tsetaf){
+        for (Argument argument:tsetaf.setOfArguments
+             ) {graph.addNode(argument.getName()).addAttribute("ui.label","Argument"+"\n"+argument.getName());
+        }
+        for (Relation relation:tsetaf.mapOfRelation
+             ) {
+            for (Argument argument:relation.getSetOfAttacker()
+                 ) {graph.addEdge(argument.getName()+relation.getAttacked(),argument.getName(),relation.getAttacked().getName(),true);
+
+            }
+
+        }
+
+        return graph;
     }
 
     public void addAvailabilityInterval(Argument a, Availability_interval b) {

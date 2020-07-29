@@ -1,9 +1,13 @@
+import org.graphstream.graph.Graph;
+import org.graphstream.graph.implementations.SingleGraph;
+
 import java.util.HashSet;
 import java.util.Objects;
 
 public class Setaf {
     private HashSet<Argument> setOfArguments;
     private HashSet<Relation> mapOfRelation;
+    Graph graph = new SingleGraph("Setaf");
 
     public Setaf() {
         this.setOfArguments = new HashSet<Argument>();
@@ -15,6 +19,21 @@ public class Setaf {
 
     public void addRelation(Relation relation){
         mapOfRelation.add(relation);
+    }
+
+    public Graph showSetaf(Setaf setaf){
+        for (Argument argument:setaf.setOfArguments
+        ) {graph.addNode(argument.getName()).addAttribute("ui.label","Argument"+"\n"+argument.getName());
+        }
+        for (Relation relation:setaf.mapOfRelation
+        ) {
+            for (Argument argument:relation.getSetOfAttacker()
+            ) {graph.addEdge(argument.getName()+relation.getAttacked(),argument.getName(),relation.getAttacked().getName(),true);
+
+            }
+
+        }
+        return  graph;
     }
 
     public HashSet<Argument> getSetOfArguments() {

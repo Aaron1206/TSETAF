@@ -1,3 +1,6 @@
+import org.graphstream.graph.Graph;
+import org.graphstream.graph.implementations.SingleGraph;
+
 public class Tsetaf_function {
     public static void main(String[] args) {
         Parser parser = new Parser();
@@ -5,10 +8,15 @@ public class Tsetaf_function {
         Setaf setaf = tsetaf.atTime(new Availability_interval(70,120,1));
         System.out.println(setaf);
         System.out.println(tsetaf);
+        tsetaf.showTsetaf(tsetaf).display();
+        setaf.showSetaf(setaf).display();
 
 
 
 
     }
+
+
+
 
 }
