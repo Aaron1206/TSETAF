@@ -33,7 +33,6 @@ public class Tsetaf {
 
     public Setaf atTime(Availability_interval availability_interval) {
         Setaf setaf = new Setaf();
-        HashSet<Argument> arguments = new HashSet<>();
         HashMap<String, HashSet<String>> Relation = new HashMap<>();
         for (Argument argument : setOfTime.keySet()) {
             ArrayList<Availability_interval> time_list = setOfTime.get(argument).getTime_list();
@@ -45,10 +44,10 @@ public class Tsetaf {
                 }
             }
         }
-        for (Relation relation : mapOfRelation
-        ) {
-            if (arguments.contains(relation.getAttacked())) {
-                if (arguments.containsAll(relation.getSetOfAttacker())) {//error
+
+        for (Relation relation : mapOfRelation) {
+            if (setaf.getSetOfArguments().contains(relation.getAttacked())) {
+                if (setaf.getSetOfArguments().containsAll(relation.getSetOfAttacker())) {//error
                     setaf.addRelation(relation);
                 }
             }
