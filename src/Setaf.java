@@ -46,14 +46,7 @@ public class Setaf {
 
     public void convertAspartix(Setaf setaf) throws IOException {
         count++;
-        File file = new File("Writefile");
-        file.mkdirs();
-        if (file.exists()) {
-            //FileWriter fileWriter = new FileWriter("\\Users\\zhujinlong\\Downloads\\TSETAF\\Writefile\\setaf+'count'+'.apx'");
-        } else {
-            file.mkdirs();
-        }
-        BufferedWriter bw = new BufferedWriter(new FileWriter("Writefile\\setaf"+count+".txt"));
+        BufferedWriter bw = new BufferedWriter(new FileWriter("setaf"+count+".txt"));
 
         for (Argument argument : setaf.setOfArguments
         ) {
