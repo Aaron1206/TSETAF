@@ -1,6 +1,10 @@
 import org.graphstream.graph.Graph;
 import org.graphstream.graph.implementations.SingleGraph;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.HashSet;
 import java.util.Objects;
 
@@ -8,32 +12,65 @@ public class Setaf {
     private HashSet<Argument> setOfArguments;
     private HashSet<Relation> mapOfRelation;
     Graph graph = new SingleGraph("Setaf");
+    public static int count = 0;
 
     public Setaf() {
         this.setOfArguments = new HashSet<Argument>();
         this.mapOfRelation = new HashSet<Relation>();
     }
-    public void addArgument(Argument argument){
+
+    public void addArgument(Argument argument) {
         setOfArguments.add(argument);
     }
 
-    public void addRelation(Relation relation){
+    public void addRelation(Relation relation) {
         mapOfRelation.add(relation);
     }
 
-    public Graph showSetaf(Setaf setaf){
-        for (Argument argument:setaf.setOfArguments
-        ) {graph.addNode(argument.getName()).addAttribute("ui.label","Argument"+"\n"+argument.getName());
-        }
-        for (Relation relation:setaf.mapOfRelation
+    public Graph showSetaf(Setaf setaf) {
+        for (Argument argument : setaf.setOfArguments
         ) {
-            for (Argument argument:relation.getSetOfAttacker()
-            ) {graph.addEdge(argument.getName()+relation.getAttacked(),argument.getName(),relation.getAttacked().getName(),true);
+            graph.addNode(argument.getName()).addAttribute("ui.label", "Argument" + "\n" + argument.getName());
+        }
+        for (Relation relation : setaf.mapOfRelation
+        ) {
+            for (Argument argument : relation.getSetOfAttacker()
+            ) {
+                graph.addEdge(argument.getName() + relation.getAttacked(), argument.getName(), relation.getAttacked().getName(), true);
 
             }
 
         }
-        return  graph;
+        return graph;
+    }
+
+    public void convertAspartix(Setaf setaf) throws IOException {
+        count++;
+        File file = new File("Writefile");
+        file.mkdirs();
+        if (file.exists()) {
+            //FileWriter fileWriter = new FileWriter("\\Users\\zhujinlong\\Downloads\\TSETAF\\Writefile\\setaf+'count'+'.apx'");
+        } else {
+            file.mkdirs();
+        }
+        BufferedWriter bw = new BufferedWriter(new FileWriter("Writefile\\setaf"+count+".txt"));
+
+        for (Argument argument : setaf.setOfArguments
+        ) {
+            //bw.write("Arg" + "(" + argument.getName() + ")");
+            bw.write(argument.toString());
+            bw.newLine();
+
+        }
+        bw.newLine();
+        for (Relation relation : setaf.mapOfRelation
+        ) {
+            bw.write(relation.toString());
+            bw.newLine();
+        }
+
+        bw.flush();
+        bw.close();
     }
 
     public HashSet<Argument> getSetOfArguments() {
