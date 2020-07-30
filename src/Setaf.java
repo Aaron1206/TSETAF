@@ -2,7 +2,6 @@ import org.graphstream.graph.Graph;
 import org.graphstream.graph.implementations.SingleGraph;
 
 import java.io.BufferedWriter;
-import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.HashSet;
@@ -46,7 +45,7 @@ public class Setaf {
 
     public void convertAspartix(Setaf setaf) throws IOException {
         count++;
-        BufferedWriter bw = new BufferedWriter(new FileWriter("setaf"+count+".txt"));
+        BufferedWriter bw = new BufferedWriter(new FileWriter("setaf" + count + ".txt"));
 
         for (Argument argument : setaf.setOfArguments
         ) {
@@ -56,9 +55,19 @@ public class Setaf {
 
         }
         bw.newLine();
+        int count1 = 0;
         for (Relation relation : setaf.mapOfRelation
         ) {
-            bw.write(relation.toString());
+            count1++;
+            bw.write("att(" + "r" + count1 + "," + relation.getAttacked().getName() + ")");
+            bw.newLine();
+            for (Argument argument : relation.getSetOfAttacker()
+            ) {
+                bw.write("mem(" + "r" + count1 + "," + argument.getName() + ")");
+                bw.newLine();
+
+            }
+            //bw.write(relation.toString());
             bw.newLine();
         }
 
