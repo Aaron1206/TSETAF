@@ -1,6 +1,6 @@
 import java.io.IOException;
 public class Tsetaf_function {
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args){
         Parser parser = new Parser();
         Tsetaf tsetaf  = parser.Parse("/Users/zhujinlong/Downloads/TSETAF/file/TSETAF1.apx");
         Setaf setaf = tsetaf.atTime(new Availability_interval(40,70,1));
@@ -8,7 +8,11 @@ public class Tsetaf_function {
         System.out.println(tsetaf);
         tsetaf.showTsetaf(tsetaf).display();
         setaf.showSetaf(setaf).display();
-        setaf.convertAspartix(setaf);
+        try {
+            setaf.convertAspartix(setaf);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
 }
