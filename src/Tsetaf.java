@@ -1,5 +1,7 @@
 import org.graphstream.graph.Graph;
 import org.graphstream.graph.implementations.SingleGraph;
+import org.graphstream.ui.spriteManager.Sprite;
+import org.graphstream.ui.spriteManager.SpriteManager;
 
 import java.util.*;
 
@@ -7,7 +9,7 @@ public class Tsetaf {
     private HashSet<Argument> setOfArguments;
     private HashSet<Relation> mapOfRelation;
     private HashMap<Argument, Time_list> setOfTime;
-    Graph graph = new SingleGraph("Tsetaf");
+
 
 
     public Tsetaf() {
@@ -29,17 +31,32 @@ public class Tsetaf {
         setOfTime.put(a, time_list);
     }
 
-    public Graph showTsetaf(Tsetaf tsetaf){
-        for (Argument argument:tsetaf.setOfArguments
-             ) {graph.addNode(argument.getName()).addAttribute("ui.label","Argument"+"\n"+argument.getName());
+    public Graph getGraph(){
+        Graph graph = new SingleGraph("Tsetaf");
+        graph.addAttribute("ui.stylesheet", "url('./stylesheet.css')");
+
+        //We add the nodes corresponding to the arguments
+        for (Argument argument: setOfArguments) {
+            graph.addNode(argument.getName()).addAttribute("ui.label",argument.getName()+" "+setOfTime.get(argument).toString());
         }
-        for (Relation relation:tsetaf.mapOfRelation
-             ) {
-            for (Argument argument:relation.getSetOfAttacker()
-                 ) {graph.addEdge(argument.getName()+relation.getAttacked(),argument.getName(),relation.getAttacked().getName(),true);
 
+        //We add the attacks
+        for (Relation relation: mapOfRelation) {
+
+            if(relation.getSetOfAttacker().size() > 1)
+            {
+                graph.addNode(relation.toString());
+                graph.getNode(relation.toString()).setAttribute("ui.class", "set");
+                for (Argument argument:relation.getSetOfAttacker()) {
+                    graph.addEdge(argument.getName()+relation.toString(),argument.getName(),relation.toString(),false);
+                }
+                graph.addEdge(relation.toString()+relation.getAttacked().getName(), relation.toString(), relation.getAttacked().getName(), true);
             }
-
+            else{
+                for (Argument argument:relation.getSetOfAttacker()) {
+                    graph.addEdge(argument.getName()+relation.getAttacked().getName(),argument.getName(),relation.getAttacked().getName(),true);
+                }
+            }
         }
 
         return graph;

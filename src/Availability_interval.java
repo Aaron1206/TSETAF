@@ -56,6 +56,6 @@ public class Availability_interval {
     @Override
     public String toString() {
         return ((type == 0 | type == 1)? "(" : "[" )+
-                start_point + "," + end_point + ((type == 0 | type == 3)? ")": "]");
+                ((start_point == Integer.MIN_VALUE )? "-inf": start_point )+ "," + ((end_point == Integer.MAX_VALUE)? "+inf": end_point) + ((type == 0 | type == 3)? ")": "]");
     }
 }

@@ -10,7 +10,7 @@ import java.util.Objects;
 public class Setaf {
     private HashSet<Argument> setOfArguments;
     private HashSet<Relation> mapOfRelation;
-    Graph graph = new SingleGraph("Setaf");
+
     public static int count = 0;
 
     public Setaf() {
@@ -26,28 +26,39 @@ public class Setaf {
         mapOfRelation.add(relation);
     }
 
-    public Graph showSetaf(Setaf setaf) {
-        for (Argument argument : setaf.setOfArguments
-        ) {
-            graph.addNode(argument.getName()).addAttribute("ui.label", "Argument" + "\n" + argument.getName());
-        }
-        for (Relation relation : setaf.mapOfRelation
-        ) {
-            for (Argument argument : relation.getSetOfAttacker()
-            ) {
-                graph.addEdge(argument.getName() + relation.getAttacked(), argument.getName(), relation.getAttacked().getName(), true);
+    public Graph getGraph() {
+        Graph graph = new SingleGraph("Setaf");
 
+        for (Argument argument: setOfArguments) {
+            graph.addNode(argument.getName()).addAttribute("ui.label",argument.getName());
+        }
+        for (Relation relation: mapOfRelation) {
+
+            if(relation.getSetOfAttacker().size() > 1)
+            {
+                graph.addNode(relation.toString());
+                for (Argument argument:relation.getSetOfAttacker()) {
+                    graph.addEdge(argument.getName()+relation.toString(),argument.getName(),relation.toString(),false);
+                }
+                graph.addEdge(relation.toString()+relation.getAttacked().getName(), relation.toString(), relation.getAttacked().getName(), true);
             }
+            else{
+                for (Argument argument:relation.getSetOfAttacker()) {
+                    graph.addEdge(argument.getName()+relation.getAttacked().getName(),argument.getName(),relation.getAttacked().getName(),true);
+                }
+            }
+
+
 
         }
         return graph;
     }
 
-    public void convertAspartix(Setaf setaf) throws IOException {
+    public void convertAspartix() throws IOException {
         count++;
         BufferedWriter bw = new BufferedWriter(new FileWriter("setaf" + count + ".apx"));
 
-        for (Argument argument : setaf.setOfArguments
+        for (Argument argument : setOfArguments
         ) {
             //bw.write("Arg" + "(" + argument.getName() + ")");
             bw.write(argument.toString());
@@ -56,7 +67,7 @@ public class Setaf {
         }
         bw.newLine();
         int count1 = 0;
-        for (Relation relation : setaf.mapOfRelation
+        for (Relation relation : mapOfRelation
         ) {
             count1++;
             bw.write("att(" + "r" + count1 + "," + relation.getAttacked().getName() + ")");

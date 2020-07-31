@@ -30,7 +30,7 @@ public class Argument {
 
     @Override
     public String toString() {
-        return "Arg("+ name + ')';
+        return "arg("+ name + ')';
     }
 
 }

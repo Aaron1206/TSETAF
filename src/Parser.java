@@ -119,6 +119,14 @@ public class Parser {
             for(String s : Argument_time.keySet()){
                 TAF.addTime(F(s, TAF.getSetOfArguments()), Timelist.get(Argument_time.get(s)));
             }
+            //We put infinite for the arguments we did not have time
+            Availability_interval InfiniteAV = new Availability_interval(Integer.MIN_VALUE, Integer.MAX_VALUE, 0);
+            Time_list InfiniteTL = new Time_list();
+            InfiniteTL.add(InfiniteAV);
+            for(String s : arguments){
+                if(!Argument_time.keySet().contains(s))
+                    TAF.addTime(F(s, TAF.getSetOfArguments()), InfiniteTL);
+            }
 
 
         } catch (FileNotFoundException e) {
