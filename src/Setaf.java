@@ -45,7 +45,7 @@ public class Setaf {
 
     public void convertAspartix(Setaf setaf) throws IOException {
         count++;
-        BufferedWriter bw = new BufferedWriter(new FileWriter("setaf" + count + ".txt"));
+        BufferedWriter bw = new BufferedWriter(new FileWriter("setaf" + count + ".apx"));
 
         for (Argument argument : setaf.setOfArguments
         ) {
@@ -70,7 +70,6 @@ public class Setaf {
             //bw.write(relation.toString());
             bw.newLine();
         }
-
         bw.flush();
         bw.close();
     }
