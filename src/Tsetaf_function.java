@@ -7,7 +7,7 @@ public class Tsetaf_function {
     public static void main(String[] args) {
         Parser parser = new Parser();
         Tsetaf tsetaf = parser.Parse("/Users/zhujinlong/Downloads/TSETAF/file/TSETAF1.apx");
-
+        //  type:0();1(];2[];3[)
         Setaf setaf = tsetaf.atTime(new Availability_interval(60, 100, 1));
         System.out.println(setaf);
         System.out.println(tsetaf);

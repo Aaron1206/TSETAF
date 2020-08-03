@@ -1,5 +1,4 @@
 import java.io.*;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -22,7 +21,6 @@ public class Parser {
             HashMap<String,Time_list> Timelist = new HashMap<>();
 
             while (true) {
-
                 try {
                     if (!((st = br.readLine()) != null)) break;
                 } catch (IOException e) {

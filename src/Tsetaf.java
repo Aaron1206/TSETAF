@@ -1,7 +1,5 @@
 import org.graphstream.graph.Graph;
 import org.graphstream.graph.implementations.SingleGraph;
-import org.graphstream.ui.spriteManager.Sprite;
-import org.graphstream.ui.spriteManager.SpriteManager;
 
 import java.util.*;
 
@@ -9,7 +7,6 @@ public class Tsetaf {
     private HashSet<Argument> setOfArguments;
     private HashSet<Relation> mapOfRelation;
     private HashMap<Argument, Time_list> setOfTime;
-
 
 
     public Tsetaf() {
@@ -31,30 +28,27 @@ public class Tsetaf {
         setOfTime.put(a, time_list);
     }
 
-    public Graph getGraph(){
+    public Graph getGraph() {
         Graph graph = new SingleGraph("Tsetaf");
         graph.addAttribute("ui.stylesheet", "url('./stylesheet.css')");
 
         //We add the nodes corresponding to the arguments
-        for (Argument argument: setOfArguments) {
-            graph.addNode(argument.getName()).addAttribute("ui.label",argument.getName()+" "+setOfTime.get(argument).toString());
+        for (Argument argument : setOfArguments) {
+            graph.addNode(argument.getName()).addAttribute("ui.label", argument.getName() + " " + setOfTime.get(argument).toString());
         }
 
         //We add the attacks
-        for (Relation relation: mapOfRelation) {
-
-            if(relation.getSetOfAttacker().size() > 1)
-            {
+        for (Relation relation : mapOfRelation) {
+            if (relation.getSetOfAttacker().size() > 1) {
                 graph.addNode(relation.toString());
                 graph.getNode(relation.toString()).setAttribute("ui.class", "set");
-                for (Argument argument:relation.getSetOfAttacker()) {
-                    graph.addEdge(argument.getName()+relation.toString(),argument.getName(),relation.toString(),false);
+                for (Argument argument : relation.getSetOfAttacker()) {
+                    graph.addEdge(argument.getName() + relation.toString(), argument.getName(), relation.toString(), false);
                 }
-                graph.addEdge(relation.toString()+relation.getAttacked().getName(), relation.toString(), relation.getAttacked().getName(), true);
-            }
-            else{
-                for (Argument argument:relation.getSetOfAttacker()) {
-                    graph.addEdge(argument.getName()+relation.getAttacked().getName(),argument.getName(),relation.getAttacked().getName(),true);
+                graph.addEdge(relation.toString() + relation.getAttacked().getName(), relation.toString(), relation.getAttacked().getName(), true);
+            } else {
+                for (Argument argument : relation.getSetOfAttacker()) {
+                    graph.addEdge(argument.getName() + relation.getAttacked().getName(), argument.getName(), relation.getAttacked().getName(), true);
                 }
             }
         }
@@ -74,15 +68,27 @@ public class Tsetaf {
         for (Argument argument : setOfTime.keySet()) {
             ArrayList<Availability_interval> time_list = setOfTime.get(argument).getTime_list();
             for (Availability_interval interval : time_list
-            ) {
-                if ((interval.getStart_point() <= availability_interval.getStart_point() && availability_interval.getStart_point() <= interval.getEnd_point()) ||
+            ) {//a b c d        [c,d]      type:0();1(];2[];3[)
+                if (availability_interval.getType() == 0 && (interval.getStart_point() < availability_interval.getStart_point() && availability_interval.getStart_point() < interval.getEnd_point()) ||
+                        (interval.getStart_point() < availability_interval.getEnd_point() && availability_interval.getEnd_point() < interval.getEnd_point())) {
+                    setaf.addArgument(argument);
+               /* if ((interval.getStart_point() <= availability_interval.getStart_point() && availability_interval.getStart_point() <= interval.getEnd_point()) ||
                         (interval.getStart_point() <= availability_interval.getEnd_point() && availability_interval.getEnd_point() <= interval.getEnd_point())) {
+                    setaf.addArgument(argument);*/
+                } else if (availability_interval.getType() == 1 && (interval.getStart_point() < availability_interval.getStart_point() && availability_interval.getStart_point() < interval.getEnd_point()) ||
+                        (interval.getStart_point() < availability_interval.getEnd_point() && availability_interval.getEnd_point() < interval.getEnd_point())) {
+                    setaf.addArgument(argument);
+                } else if (availability_interval.getType() == 2 && (interval.getStart_point() <= availability_interval.getStart_point() && availability_interval.getStart_point() <= interval.getEnd_point()) ||
+                        (interval.getStart_point() <= availability_interval.getEnd_point() && availability_interval.getEnd_point() <= interval.getEnd_point())) {
+                    setaf.addArgument(argument);
+                } else if (availability_interval.getType() == 3 && (interval.getStart_point() <= availability_interval.getStart_point() && availability_interval.getStart_point() < interval.getEnd_point()) ||
+                        (interval.getStart_point() <= availability_interval.getEnd_point() && availability_interval.getEnd_point() < interval.getEnd_point())) {
                     setaf.addArgument(argument);
                 }
             }
         }
-
-        for (Relation relation : mapOfRelation) {
+        for (
+                Relation relation : mapOfRelation) {
             if (setaf.getSetOfArguments().contains(relation.getAttacked())) {
                 if (setaf.getSetOfArguments().containsAll(relation.getSetOfAttacker())) {//error
                     setaf.addRelation(relation);
@@ -101,11 +107,9 @@ public class Tsetaf {
         return mapOfRelation;
     }
 
-
     public HashMap<Argument, Time_list> getSetOfTime() {
         return setOfTime;
     }
-
 
     @Override
     public boolean equals(Object o) {
