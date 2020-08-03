@@ -7,8 +7,8 @@ arg(f)
 
 time_list(a,L1)
 mem1(L1,(0,80))
-mem1(L1,(90,120)）
-mem1(L1,(130,150)）
+mem1(L1,(90,120))
+mem1(L1,(130,150))
 
 time_list(b,L2)
 mem1(L2,[0,60])

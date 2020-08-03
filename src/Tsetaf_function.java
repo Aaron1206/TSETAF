@@ -1,7 +1,8 @@
 import org.graphstream.graph.Graph;
 import org.graphstream.ui.view.Viewer;
-
+import java.io.File;
 import java.io.IOException;
+import java.text.Format;
 
 public class Tsetaf_function {
     public static void main(String[] args) {
@@ -22,7 +23,7 @@ public class Tsetaf_function {
         write(G1);
         Graph G2 = setaf.getGraph();
         write(G2);
-
+     // Graphviz.fromGraph(G1).height(100).render(Format.PNG).toFile(new File("example/ex1.png"));
         Viewer vTSETAF = G1.display();
         Viewer vSETAF = G2.display();
 

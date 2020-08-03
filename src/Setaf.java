@@ -4,6 +4,7 @@ import org.graphstream.graph.implementations.SingleGraph;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Objects;
 
@@ -29,25 +30,22 @@ public class Setaf {
     public Graph getGraph() {
         Graph graph = new SingleGraph("Setaf");
 
-        for (Argument argument: setOfArguments) {
-            graph.addNode(argument.getName()).addAttribute("ui.label",argument.getName());
+        for (Argument argument : setOfArguments) {
+            graph.addNode(argument.getName()).addAttribute("ui.label", argument.getName());
         }
-        for (Relation relation: mapOfRelation) {
+        for (Relation relation : mapOfRelation) {
 
-            if(relation.getSetOfAttacker().size() > 1)
-            {
+            if (relation.getSetOfAttacker().size() > 1) {
                 graph.addNode(relation.toString());
-                for (Argument argument:relation.getSetOfAttacker()) {
-                    graph.addEdge(argument.getName()+relation.toString(),argument.getName(),relation.toString(),false);
+                for (Argument argument : relation.getSetOfAttacker()) {
+                    graph.addEdge(argument.getName() + relation.toString(), argument.getName(), relation.toString(), false);
                 }
-                graph.addEdge(relation.toString()+relation.getAttacked().getName(), relation.toString(), relation.getAttacked().getName(), true);
-            }
-            else{
-                for (Argument argument:relation.getSetOfAttacker()) {
-                    graph.addEdge(argument.getName()+relation.getAttacked().getName(),argument.getName(),relation.getAttacked().getName(),true);
+                graph.addEdge(relation.toString() + relation.getAttacked().getName(), relation.toString(), relation.getAttacked().getName(), true);
+            } else {
+                for (Argument argument : relation.getSetOfAttacker()) {
+                    graph.addEdge(argument.getName() + relation.getAttacked().getName(), argument.getName(), relation.getAttacked().getName(), true);
                 }
             }
-
 
 
         }
@@ -84,6 +82,29 @@ public class Setaf {
         bw.flush();
         bw.close();
     }
+
+    public HashMap<Argument, Double> getHN_categoriser() {
+        HashMap<Argument, Double> map = new HashMap<>();
+        for (Argument argument : setOfArguments
+        ) {
+            map.put(argument, 1.0);
+            getAttackers(argument)
+        }
+
+
+    }
+
+    public HashSet<Relation> getAttackers(Argument argument) {
+        HashSet<Relation> set = new HashSet<>();
+        for (Relation relation : mapOfRelation
+        ) {
+            if (relation.getAttacked().equals(argument)) {
+                set.add(relation);
+            }
+        }
+        return set;
+    }
+
 
     public HashSet<Argument> getSetOfArguments() {
         return setOfArguments;
