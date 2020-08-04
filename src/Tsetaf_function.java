@@ -1,5 +1,6 @@
 import org.graphstream.graph.Graph;
 import org.graphstream.ui.view.Viewer;
+
 import java.io.File;
 import java.io.IOException;
 import java.text.Format;
@@ -9,7 +10,33 @@ public class Tsetaf_function {
         Parser parser = new Parser();
         Tsetaf tsetaf = parser.Parse("/Users/zhujinlong/Downloads/TSETAF/file/TSETAF1.apx");
         //  type:0();1(];2[];3[)
-        Setaf setaf = tsetaf.atTime(new Availability_interval(60, 100, 1));
+        Setaf setaf = tsetaf.atTime(new Availability_interval(110, 500, 1));
+    /*
+	 System.out.println("please select the function:");
+        System.out.println("1. generate tsetaf\n2. generate setaf\n3. generate tsetaf graph\n4. generate setaf graph");
+        Scanner scanner = new Scanner(System.in);
+        int next = scanner.nextInt();
+        if (next == 1) {
+            System.out.println(tsetaf);
+        } else if (next == 2) {
+            System.out.println(setaf);
+        } else if (next == 3) {
+            Graph G1 = tsetaf.getGraph();
+            write(G1);
+            Viewer vTSETAF = G1.display();
+        }else if(next==4){
+            Graph G2 = setaf.getGraph();
+            write(G2);
+            Viewer vSETAF = G2.display();
+        }
+
+
+        try {
+            setaf.convertAspartix();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+	*/
         System.out.println(setaf);
         System.out.println(tsetaf);
 
@@ -23,9 +50,10 @@ public class Tsetaf_function {
         write(G1);
         Graph G2 = setaf.getGraph();
         write(G2);
-     // Graphviz.fromGraph(G1).height(100).render(Format.PNG).toFile(new File("example/ex1.png"));
-        Viewer vTSETAF = G1.display();
-        Viewer vSETAF = G2.display();
+        //   Viewer vTSETAF = G1.display();
+        //Viewer vSETAF = G2.display();
+
+        System.out.println(setaf.getHN_categoriser(10));
 
     }
 

@@ -6,6 +6,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Objects;
 
 public class Setaf {
@@ -83,14 +84,41 @@ public class Setaf {
         bw.close();
     }
 
-    public HashMap<Argument, Double> getHN_categoriser() {
+    public HashMap<Argument, Double> getHN_categoriser(int numberOfsteps) {
         HashMap<Argument, Double> map = new HashMap<>();
-        for (Argument argument : setOfArguments
-        ) {
+
+        //We give a score of 1 to each argument at step 1
+        for (Argument argument : setOfArguments) {
             map.put(argument, 1.0);
-            getAttackers(argument)
         }
 
+        //We update the scores
+        for(int i = 0; i <numberOfsteps; i++){
+            HashMap<Argument, Double> PreviousScore = new HashMap<>(); //We store the score of map at the previous step
+            for (Argument argument : setOfArguments) {
+                PreviousScore.put(argument, map.get(argument));
+            }
+
+            //We now use the score of the previous step to update the current score
+            for (Argument argument : setOfArguments) {
+                HashSet<Relation> ArgAttackers = getAttackers(argument);
+                Double sum = 1.0;
+                for(Relation r : ArgAttackers){
+                    Iterator<Argument> iterAttacker = r.getSetOfAttacker().iterator();
+                    Double minAttacker = map.get(iterAttacker.next());
+                    while(iterAttacker.hasNext())
+                    {
+                        Double nextValue = map.get(iterAttacker.next());
+                        if(nextValue < minAttacker)
+                            minAttacker = nextValue;
+                    }
+                    sum+=minAttacker;
+                }
+                map.put(argument, 1/sum);
+            }
+        }
+
+        return map;
 
     }
 
