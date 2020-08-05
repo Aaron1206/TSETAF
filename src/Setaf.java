@@ -4,10 +4,7 @@ import org.graphstream.graph.implementations.SingleGraph;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Objects;
+import java.util.*;
 
 public class Setaf {
     private HashSet<Argument> setOfArguments;
@@ -26,6 +23,63 @@ public class Setaf {
 
     public void addRelation(Relation relation) {
         mapOfRelation.add(relation);
+    }
+
+    public HashSet<Set> getCompletefree_extension() {
+        //取出一个论证a,找到被a攻击的b,c, 找到被b或c攻击d
+        HashSet<Set> cmset = new HashSet<>();
+        //遍历argument集合
+        for (Argument argument : setOfArguments
+        ) {
+            HashSet<Argument> arguments_defend = new HashSet<>(); //cmset内存储的集合
+            HashSet<Argument> attack_argument = new HashSet<>();//存储攻击攻击a的argument
+            for (Relation r : mapOfRelation
+            ) {
+                //System.out.println(r.getSetOfAttacker()+"attack\n"+r.getAttacked());
+                if (r.getAttacked() == argument) {
+                    for (Argument a : r.getSetOfAttacker()
+                    ) {
+                        attack_argument.add(a);
+                    }
+                }
+
+            }
+            HashSet<Argument> arguments_attacker = new HashSet<>();//存储被a攻击的argument
+            for (Relation relation : mapOfRelation
+            ) {//找出被a攻击的bc
+                if (relation.getSetOfAttacker().contains(argument)) {
+                    arguments_attacker.add(relation.getAttacked());//bc
+                }
+            }
+            if (arguments_attacker.containsAll(attack_argument)) {
+                arguments_defend.add(argument);
+            }
+            if (arguments_defend.iterator().hasNext()) {
+                //遍历bc
+                for (Argument argument1 : arguments_attacker
+                ) {//找出被bc攻击的ef
+                    for (Relation relation : mapOfRelation
+                    ) {
+                        System.out.println(relation.getSetOfAttacker()+"attack:"+relation.getAttacked());
+                        //System.out.println(relation.getAttacked()+"的攻击者"+relation.getSetOfAttacker());
+                        if (relation.getSetOfAttacker().contains(argument1)) {//被bc攻击的f存在
+                            { if (arguments_attacker.containsAll(relation.getSetOfAttacker()) &&
+                                    !(attack_argument.contains(relation.getAttacked()))) {
+                                    System.out.println("第一个："+argument);
+                                    System.out.println("被第一个攻击的："+arguments_attacker);
+                                    //System.out.println(relation.getAttacked()+"的攻击者："+relation.getSetOfAttacker());
+                                    System.out.println(arguments_defend);
+                                    arguments_defend.add(relation.getAttacked());//ef;
+                                }
+                            }
+                        }
+                    }
+                }
+                cmset.add(arguments_defend);
+            }
+        }
+        return cmset;
+
     }
 
     public Graph getGraph() {
@@ -93,7 +147,7 @@ public class Setaf {
         }
 
         //We update the scores
-        for(int i = 0; i <numberOfsteps; i++){
+        for (int i = 0; i < numberOfsteps; i++) {
             HashMap<Argument, Double> PreviousScore = new HashMap<>(); //We store the score of map at the previous step
             for (Argument argument : setOfArguments) {
                 PreviousScore.put(argument, map.get(argument));
@@ -103,18 +157,17 @@ public class Setaf {
             for (Argument argument : setOfArguments) {
                 HashSet<Relation> ArgAttackers = getAttackers(argument);
                 Double sum = 1.0;
-                for(Relation r : ArgAttackers){
+                for (Relation r : ArgAttackers) {
                     Iterator<Argument> iterAttacker = r.getSetOfAttacker().iterator();
                     Double minAttacker = map.get(iterAttacker.next());
-                    while(iterAttacker.hasNext())
-                    {
+                    while (iterAttacker.hasNext()) {
                         Double nextValue = map.get(iterAttacker.next());
-                        if(nextValue < minAttacker)
+                        if (nextValue < minAttacker)
                             minAttacker = nextValue;
                     }
-                    sum+=minAttacker;
+                    sum += minAttacker;
                 }
-                map.put(argument, 1/sum);
+                map.put(argument, 1 / sum);
             }
         }
 
