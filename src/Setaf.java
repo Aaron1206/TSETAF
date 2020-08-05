@@ -25,14 +25,14 @@ public class Setaf {
         mapOfRelation.add(relation);
     }
 
-    public HashSet<Set> getCompletefree_extension() {
+    public HashSet<Set> getComplete_extension() {
         //取出一个论证a,找到被a攻击的b,c, 找到被b或c攻击d
         HashSet<Set> cmset = new HashSet<>();
         //遍历argument集合
         for (Argument argument : setOfArguments
         ) {
             HashSet<Argument> arguments_defend = new HashSet<>(); //cmset内存储的集合
-            HashSet<Argument> attack_argument = new HashSet<>();//存储攻击攻击a的argument
+            HashSet<Argument> attack_argument = new HashSet<>();//attack_argument is a set attack argument a
             for (Relation r : mapOfRelation
             ) {
                 //System.out.println(r.getSetOfAttacker()+"attack\n"+r.getAttacked());
@@ -44,31 +44,34 @@ public class Setaf {
                 }
 
             }
-            HashSet<Argument> arguments_attacker = new HashSet<>();//存储被a攻击的argument
+            HashSet<Argument> arguments_attacker = new HashSet<>();// arguments_attacker is a set attacked by argument a
             for (Relation relation : mapOfRelation
             ) {//找出被a攻击的bc
-                if (relation.getSetOfAttacker().contains(argument)) {
-                    arguments_attacker.add(relation.getAttacked());//bc
+                if (relation.getSetOfAttacker().contains(argument)) { //
+                    arguments_attacker.add(relation.getAttacked());//bc  the argument which attacker of a is added in arguments_attacker
                 }
             }
-            if (arguments_attacker.containsAll(attack_argument)) {
+            if (arguments_attacker.containsAll(attack_argument)) {  //attack_arguemnt is a subset of arguments_attacker , means the argument which attack a all attacked by a,so a is safe.
+                System.out.println("集合的第一个元素:"+argument);
                 arguments_defend.add(argument);
             }
-            if (arguments_defend.iterator().hasNext()) {
+            if (arguments_defend.iterator().hasNext()) { // if arguments_defend is null, do not print,
                 //遍历bc
-                for (Argument argument1 : arguments_attacker
-                ) {//找出被bc攻击的ef
+               // System.out.println(arguments_defend.iterator().next());
+                for (Argument argument1 : arguments_attacker   //
+                ) {//找出被bc攻击的d
+                    System.out.println(argument1);
                     for (Relation relation : mapOfRelation
                     ) {
-                        System.out.println(relation.getSetOfAttacker()+"attack:"+relation.getAttacked());
+                        //System.out.println(relation.getSetOfAttacker()+"attack:"+relation.getAttacked());
                         //System.out.println(relation.getAttacked()+"的攻击者"+relation.getSetOfAttacker());
-                        if (relation.getSetOfAttacker().contains(argument1)) {//被bc攻击的f存在
-                            { if (arguments_attacker.containsAll(relation.getSetOfAttacker()) &&
-                                    !(attack_argument.contains(relation.getAttacked()))) {
-                                    System.out.println("第一个："+argument);
-                                    System.out.println("被第一个攻击的："+arguments_attacker);
+                        if (relation.getSetOfAttacker().contains(argument1)) {//d is attacked by the set which contains b,c.  if a argument is attacked by arguments_attacker，
+                            { if (arguments_attacker.containsAll(relation.getSetOfAttacker()) && //and whole the arguments attacked this arguments is subset of arguments_attacker
+                                    !(attack_argument.contains(relation.getAttacked()))) {  // 攻击a的集合不包含 d
+                                    //System.out.println("第一个："+argument);
+                                    //System.out.println("被第一个攻击的："+arguments_attacker);
                                     //System.out.println(relation.getAttacked()+"的攻击者："+relation.getSetOfAttacker());
-                                    System.out.println(arguments_defend);
+                                    //System.out.println(arguments_defend);
                                     arguments_defend.add(relation.getAttacked());//ef;
                                 }
                             }
