@@ -57,22 +57,30 @@ public class Setaf {
     }
 
     public Set<Set<Argument>> getConflictFree() {
-        Set<Set<Argument>> confree_set = new LinkedHashSet<>();
+        //Set<Set<Argument>> confree_set = new LinkedHashSet<>();
         Set<Set<Argument>> subset = getSubset();
+        Set<Set<Argument>> remove_set = new LinkedHashSet<>();
         for (Set<Argument> set : subset
         ) {
             for (Argument argument : set
             ) {
                 for (Relation relation : mapOfRelation
                 ) {
-                    if (set.containsAll(relation.getSetOfAttacker())) {
-                        subset.remove(set);
+                    if (set.contains(relation.getAttacked()) && set.containsAll(relation.getSetOfAttacker())) {
+                        //subset.remove(set);
+                        remove_set.add(set);
                     }
                 }
             }
         }
-        System.out.println(confree_set);
-        return confree_set;
+        for (Set<Argument> set : remove_set
+        ) {
+            if (subset.contains(set)) {
+                subset.remove(set);
+            }
+        }
+        System.out.println(subset);
+        return subset;
     }
 
 
