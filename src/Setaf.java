@@ -25,39 +25,63 @@ public class Setaf {
         mapOfRelation.add(relation);
     }
 
-    //find all subsets of set
-    public Set<Set<Argument>> getSubset() {
-        Set<Set<Argument>> subset = subsets(setOfArguments);
-        for (Set<Argument> arguments : subset
-        ) {
-            System.out.println(arguments);
+   /* //find all subsets of set
+    public HashSet<HashSet<Argument>>  getSubset() {
+        int n = setOfArguments.size();
+        ArrayList<Argument> ArrayArguments = new ArrayList<>(setOfArguments);
+
+        HashSet<HashSet<Argument>> result = new HashSet<>();
+        // Run a loop from 0 to 2^n
+        for (int i = 0; i < (1<<n); i++)
+        {
+            HashSet<Argument> setToBeConstructed = new HashSet<>();
+            int m = 1; // m is used to check set bit in binary representation.
+            // Print current subset
+            for (int j = 0; j < n; j++)
+            {
+                if ((i & m) > 0)
+                {
+                    setToBeConstructed.add(ArrayArguments.get(j));
+                }
+                m = m << 1;
+            }
+
+            result.add(setToBeConstructed);
         }
-        return subset;
+
+        return result;
+    }*/
+
+    public Set<Set<Argument>>  getSubset() {
+        int n = setOfArguments.size();
+        ArrayList<Argument> ArrayArguments = new ArrayList<>(setOfArguments);
+
+        Set<Set<Argument>> result = new HashSet<>();
+        // Run a loop from 0 to 2^n
+        for (int i = 0; i < (1<<n); i++)
+        {
+            Set<Argument> setToBeConstructed = new HashSet<>();
+            int m = 1; // m is used to check set bit in binary representation.
+            // Print current subset
+            for (int j = 0; j < n; j++)
+            {
+                if ((i & m) > 0)
+                {
+                    setToBeConstructed.add(ArrayArguments.get(j));
+                }
+                m = m << 1;
+            }
+
+            result.add(setToBeConstructed);
+        }
+
+        return result;
     }
 
-    public Set<Set<Argument>> subsets(HashSet<Argument> hashSet) {
-        List<Argument> listOfArguments = new ArrayList<>();
-        for (Argument arguments : hashSet
-        ) {
-            listOfArguments.add(arguments);
-        }
-        Set<Set<Argument>> set = new LinkedHashSet<>();
-        subsetsHelper(set, new LinkedHashSet<>(), listOfArguments, 0);
-        return set;
 
-    }
 
-    private void subsetsHelper(Set<Set<Argument>> set, Set<Argument> resultSet, List<Argument> list, int start) {
-        set.add(new LinkedHashSet<>(resultSet));
-        for (int i = start; i < list.size(); i++) {
-            resultSet.add(list.get(i));
-            subsetsHelper(set, resultSet, list, i + 1);
-            resultSet.remove(resultSet.size() - 1);
-        }
-    }
-
+    // the function of conflict free
     public Set<Set<Argument>> getConflictFree() {
-        //Set<Set<Argument>> confree_set = new LinkedHashSet<>();
         Set<Set<Argument>> subset = getSubset();
         Set<Set<Argument>> remove_set = new LinkedHashSet<>();
         for (Set<Argument> set : subset
@@ -67,7 +91,7 @@ public class Setaf {
                 for (Relation relation : mapOfRelation
                 ) {
                     if (set.contains(relation.getAttacked()) && set.containsAll(relation.getSetOfAttacker())) {
-                        //subset.remove(set);
+                        //subset.remove(set);   //ConcurrentModificationException (when iterate can not modify the element in set)
                         remove_set.add(set);
                     }
                 }
@@ -79,8 +103,40 @@ public class Setaf {
                 subset.remove(set);
             }
         }
-        System.out.println(subset);
+        //System.out.println("the conflict free:"+subset);
         return subset;
+    }
+
+    // the function of getting admissible extension
+    public Set<Set<Argument>> getAdmissible() {
+        Set<Set<Argument>> conFreeSet = getConflictFree();
+
+        return conFreeSet;
+
+    }
+
+    // the function of getting complete extension
+    public Set<Set<Argument>> getComplete() {
+        Set<Set<Argument>> admissibleSet = getAdmissible();
+
+
+        return admissibleSet;
+    }
+
+    // the function of getting preferred extension
+    public Set<Set<Argument>> getPreferred() {
+        Set<Set<Argument>> completeSet = getComplete();
+
+
+        return completeSet;
+    }
+
+    // the function of getting grounded extension
+    public Set<Set<Argument>> getGrounded() {
+        Set<Set<Argument>> preferredSet = getPreferred();
+
+
+        return preferredSet;
     }
 
 
