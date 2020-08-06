@@ -56,8 +56,8 @@ public class Setaf {
         }
     }
 
-    public Set<Set<Argument>> getConflicRee() {
-        Set<Set<Argument>> confree_set = new HashSet<>();
+    public Set<Set<Argument>> getConflictFree() {
+        Set<Set<Argument>> confree_set = new LinkedHashSet<>();
         Set<Set<Argument>> subset = getSubset();
         for (Set<Argument> set : subset
         ) {

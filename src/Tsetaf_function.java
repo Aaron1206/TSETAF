@@ -15,7 +15,7 @@ public class Tsetaf_function {
         System.out.println(setaf);
         //System.out.println(setaf.getComplete_extension());
         setaf.getSubset();
-        setaf.getConflicRee();
+        setaf.getConflictFree();
       /*  int next = -1;
         while (next != 0) {
             System.out.println("please select the function:");
