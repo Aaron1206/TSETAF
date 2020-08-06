@@ -25,48 +25,19 @@ public class Setaf {
         mapOfRelation.add(relation);
     }
 
-   /* //find all subsets of set
-    public HashSet<HashSet<Argument>>  getSubset() {
-        int n = setOfArguments.size();
-        ArrayList<Argument> ArrayArguments = new ArrayList<>(setOfArguments);
-
-        HashSet<HashSet<Argument>> result = new HashSet<>();
-        // Run a loop from 0 to 2^n
-        for (int i = 0; i < (1<<n); i++)
-        {
-            HashSet<Argument> setToBeConstructed = new HashSet<>();
-            int m = 1; // m is used to check set bit in binary representation.
-            // Print current subset
-            for (int j = 0; j < n; j++)
-            {
-                if ((i & m) > 0)
-                {
-                    setToBeConstructed.add(ArrayArguments.get(j));
-                }
-                m = m << 1;
-            }
-
-            result.add(setToBeConstructed);
-        }
-
-        return result;
-    }*/
-
-    public Set<Set<Argument>>  getSubset() {
+    //find all subsets of set
+    public Set<Set<Argument>> getSubset() {
         int n = setOfArguments.size();
         ArrayList<Argument> ArrayArguments = new ArrayList<>(setOfArguments);
 
         Set<Set<Argument>> result = new HashSet<>();
         // Run a loop from 0 to 2^n
-        for (int i = 0; i < (1<<n); i++)
-        {
+        for (int i = 0; i < (1 << n); i++) {
             Set<Argument> setToBeConstructed = new HashSet<>();
             int m = 1; // m is used to check set bit in binary representation.
             // Print current subset
-            for (int j = 0; j < n; j++)
-            {
-                if ((i & m) > 0)
-                {
+            for (int j = 0; j < n; j++) {
+                if ((i & m) > 0) {
                     setToBeConstructed.add(ArrayArguments.get(j));
                 }
                 m = m << 1;
@@ -77,7 +48,6 @@ public class Setaf {
 
         return result;
     }
-
 
 
     // the function of conflict free
@@ -103,16 +73,61 @@ public class Setaf {
                 subset.remove(set);
             }
         }
-        //System.out.println("the conflict free:"+subset);
         return subset;
+    }
+
+    public Set<Set<Argument>> getAttackersOfArgument(HashSet<Relation> mapOfRelation, Argument a) {
+        //Set<Argument> attackersOfArgumentSet = new HashSet<>();
+        Set<Set<Argument>> set = new HashSet<>();
+        for (Relation relation : mapOfRelation
+        ) {
+            if (relation.getAttacked().equals(a)) {
+                set.add(relation.getSetOfAttacker());
+            }
+
+        }
+
+        return set;
+
+
     }
 
     // the function of getting admissible extension
     public Set<Set<Argument>> getAdmissible() {
         Set<Set<Argument>> conFreeSet = getConflictFree();
+        Set<Set<Argument>> admissible_set = new LinkedHashSet<>();
+        for (Set<Argument> set : conFreeSet
+        ) {
+            for (Argument argument : set
+            ) {
+                for (Relation relation : mapOfRelation
+                ) {
+                    if (relation.getAttacked().equals(argument)) {
+                        for (Argument argument1 : relation.getSetOfAttacker()
+                        ) {
+                            for (Relation r : mapOfRelation
+                            ) {
+                                if (r.getAttacked().equals(argument1)) {
+                                    Set<Set<Argument>> attackersOfArgument = getAttackersOfArgument(mapOfRelation, r.getAttacked());
+                                   // System.out.println("被攻击者："+r.getAttacked());
+                                   // System.out.println("攻击集合："+attackersOfArgument);
+                                   // System.out.println(set);
+                                   // System.out.println(attackersOfArgument);
+                                    //boolean b = set.containsAll(attackersOfArgument);
+                                    //System.out.println(b);
+                                   /* if (attackersOfArgument.size()==0) {//只能得到一个
+                                            admissible_set.add(set);*/
 
-        return conFreeSet;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
 
+        return admissible_set;
     }
 
     // the function of getting complete extension
