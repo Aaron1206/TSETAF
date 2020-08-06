@@ -2,40 +2,28 @@ arg(a)
 arg(b)
 arg(c)
 arg(d)
-arg(e)
-arg(f)
 
-av(a) = (0,80) U (90,120) U (130,150)
-av(b) = [0,60]
-av(c) = (20,80]
-av(d) = [70,90]
-av(e) = (40,90]
-av(f) = (50,120]
+time_list(a,L1)
+mem1(L1,(0,80))
+
+time_list(b,L2)
+mem1(L2,(0,80))
+
+time_list(c,L3)
+mem1(L3,(0,80))
+
+time_list(d,L4)
+mem1(L4,(0,80))
 
 att(r1,b)
-mem(r1,a)
+mem2(r1,a)
 
-att(r2,c)
-mem(r2,a)
+att(r2,a)
+mem2(r2,b)
+mem2(r2,c)
 
 att(r3,a)
-mem(r3,b)
-
-att(r4,d)
-mem(r4,b)
-mem(r4,c)
-
-att(r5,a)
-mem(r5,c)
-
-att(r6,e)
-mem(r6,d)
-
-att(r7,f)
-mem(r7,e)
-
-att(r8,d)
-mem(r8,f)
+mem2(r3,d)
 
 
 

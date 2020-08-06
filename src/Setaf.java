@@ -109,15 +109,10 @@ public class Setaf {
                             ) {
                                 if (r.getAttacked().equals(argument1)) {
                                     Set<Set<Argument>> attackersOfArgument = getAttackersOfArgument(mapOfRelation, r.getAttacked());
-                                   // System.out.println("被攻击者："+r.getAttacked());
-                                   // System.out.println("攻击集合："+attackersOfArgument);
-                                   // System.out.println(set);
-                                   // System.out.println(attackersOfArgument);
-                                    //boolean b = set.containsAll(attackersOfArgument);
-                                    //System.out.println(b);
-                                   /* if (attackersOfArgument.size()==0) {//只能得到一个
-                                            admissible_set.add(set);*/
-
+                                    //System.out.println(r.getAttacked()+"的攻击集合是："+attackersOfArgument);
+                                        if(set.containsAll(attackersOfArgument)){
+                                            admissible_set.add(set);
+                                        }
                                     }
                                 }
                             }
@@ -125,8 +120,6 @@ public class Setaf {
                     }
                 }
             }
-        }
-
         return admissible_set;
     }
 

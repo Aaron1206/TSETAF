@@ -14,8 +14,9 @@ public class Tsetaf_function {
         Setaf setaf = tsetaf.atTime(new Availability_interval(0, 130, 1));
         System.out.println(setaf);
         //System.out.println(setaf.getComplete_extension());
-        setaf.getSubset();
-        setaf.getConflictFree();
+        System.out.println("all subsets:\n"+setaf.getSubset());
+        System.out.println("conflict free:\n"+setaf.getConflictFree());
+        System.out.println("Admissible:\n"+setaf.getAdmissible());
       /*  int next = -1;
         while (next != 0) {
             System.out.println("please select the function:");
