@@ -25,7 +25,57 @@ public class Setaf {
         mapOfRelation.add(relation);
     }
 
-    public HashSet<Set> getComplete_extension() {
+    //find all subsets of set
+    public Set<Set<Argument>> getSubset() {
+        Set<Set<Argument>> subset = subsets(setOfArguments);
+        for (Set<Argument> arguments : subset
+        ) {
+            System.out.println(arguments);
+        }
+        return subset;
+    }
+
+    public Set<Set<Argument>> subsets(HashSet<Argument> hashSet) {
+        List<Argument> listOfArguments = new ArrayList<>();
+        for (Argument arguments : hashSet
+        ) {
+            listOfArguments.add(arguments);
+        }
+        Set<Set<Argument>> set = new LinkedHashSet<>();
+        subsetsHelper(set, new LinkedHashSet<>(), listOfArguments, 0);
+        return set;
+
+    }
+
+    private void subsetsHelper(Set<Set<Argument>> set, Set<Argument> resultSet, List<Argument> list, int start) {
+        set.add(new LinkedHashSet<>(resultSet));
+        for (int i = start; i < list.size(); i++) {
+            resultSet.add(list.get(i));
+            subsetsHelper(set, resultSet, list, i + 1);
+            resultSet.remove(resultSet.size() - 1);
+        }
+    }
+
+    public Set<Set<Argument>> getConflicRee() {
+        Set<Set<Argument>> confree_set = new HashSet<>();
+        Set<Set<Argument>> subset = getSubset();
+        for (Set<Argument> set : subset
+        ) {
+            for (Argument argument : set
+            ) {
+                for (Relation relation : mapOfRelation
+                ) {
+                    if (set.containsAll(relation.getSetOfAttacker())) {
+                        subset.remove(set);
+                    }
+                }
+            }
+        }
+        return confree_set;
+    }
+
+
+  /*  public HashSet<Set> getComplete_extension() {
         //取出一个论证a,找到被a攻击的b,c, 找到被b或c攻击d
         HashSet<Set> cmset = new HashSet<>();
         //遍历argument集合
@@ -52,12 +102,12 @@ public class Setaf {
                 }
             }
             if (arguments_attacker.containsAll(attack_argument)) {  //attack_arguemnt is a subset of arguments_attacker , means the argument which attack a all attacked by a,so a is safe.
-                System.out.println("集合的第一个元素:"+argument);
+                System.out.println("集合的第一个元素:" + argument);
                 arguments_defend.add(argument);
             }
             if (arguments_defend.iterator().hasNext()) { // if arguments_defend is null, do not print,
                 //遍历bc
-               // System.out.println(arguments_defend.iterator().next());
+                // System.out.println(arguments_defend.iterator().next());
                 for (Argument argument1 : arguments_attacker   //
                 ) {//找出被bc攻击的d
                     System.out.println(argument1);
@@ -66,8 +116,9 @@ public class Setaf {
                         //System.out.println(relation.getSetOfAttacker()+"attack:"+relation.getAttacked());
                         //System.out.println(relation.getAttacked()+"的攻击者"+relation.getSetOfAttacker());
                         if (relation.getSetOfAttacker().contains(argument1)) {//d is attacked by the set which contains b,c.  if a argument is attacked by arguments_attacker，
-                            { if (arguments_attacker.containsAll(relation.getSetOfAttacker()) && //and whole the arguments attacked this arguments is subset of arguments_attacker
-                                    !(attack_argument.contains(relation.getAttacked()))) {  // 攻击a的集合不包含 d
+                            {
+                                if (arguments_attacker.containsAll(relation.getSetOfAttacker()) && //and whole the arguments attacked this arguments is subset of arguments_attacker
+                                        !(attack_argument.contains(relation.getAttacked()))) {  // 攻击a的集合不包含 d
                                     //System.out.println("第一个："+argument);
                                     //System.out.println("被第一个攻击的："+arguments_attacker);
                                     //System.out.println(relation.getAttacked()+"的攻击者："+relation.getSetOfAttacker());
@@ -83,7 +134,7 @@ public class Setaf {
         }
         return cmset;
 
-    }
+    }*/
 
     public Graph getGraph() {
         Graph graph = new SingleGraph("Setaf");
