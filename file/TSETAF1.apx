@@ -25,6 +25,9 @@ mem1(L5,(40,90])
 time_list(e,L6)
 mem1(L6,(50,120])
 
+time_list(f,L7)
+mem1(L7,(0,120])
+
 att(r1,b)
 mem2(r1,a)
 

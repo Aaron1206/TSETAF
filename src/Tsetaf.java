@@ -102,7 +102,7 @@ public class Tsetaf {
             for (
                     Relation relation : mapOfRelation) {
                 if (setaf.getSetOfArguments().contains(relation.getAttacked())) {
-                    if (setaf.getSetOfArguments().containsAll(relation.getSetOfAttacker())) {//error
+                    if (setaf.getSetOfArguments().containsAll(relation.getSetOfAttacker())) {
                         setaf.addRelation(relation);
                     }
                 }

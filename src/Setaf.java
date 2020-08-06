@@ -71,6 +71,7 @@ public class Setaf {
                 }
             }
         }
+        System.out.println(confree_set);
         return confree_set;
     }
 

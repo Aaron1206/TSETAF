@@ -11,8 +11,12 @@ public class Tsetaf_function {
         Parser parser = new Parser();
         Tsetaf tsetaf = parser.Parse("/Users/zhujinlong/Downloads/TSETAF/file/TSETAF1.apx");
         //  type:0();1(];2[];3[)
-        Setaf setaf = tsetaf.atTime(new Availability_interval(110, 500, 1));
-        int next = -1;
+        Setaf setaf = tsetaf.atTime(new Availability_interval(0, 130, 1));
+        System.out.println(setaf);
+        //System.out.println(setaf.getComplete_extension());
+        setaf.getSubset();
+        setaf.getConflicRee();
+      /*  int next = -1;
         while (next != 0) {
             System.out.println("please select the function:");
             System.out.println("0-----exit");
@@ -56,7 +60,7 @@ public class Tsetaf_function {
                     System.out.println("please input the correct number:");
                     break;
             }
-        }
+        }*/
 /*
         try {
             setaf.convertAspartix();
