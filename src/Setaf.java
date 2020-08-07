@@ -26,14 +26,14 @@ public class Setaf {
     }
 
     //find all subsets of set
-    public Set<Set<Argument>> getSubset() {
+    public HashSet<HashSet<Argument>> getSubset() {
         int n = setOfArguments.size();
         ArrayList<Argument> ArrayArguments = new ArrayList<>(setOfArguments);
 
-        Set<Set<Argument>> result = new HashSet<>();
+        HashSet<HashSet<Argument>> result = new HashSet<>();
         // Run a loop from 0 to 2^n
         for (int i = 0; i < (1 << n); i++) {
-            Set<Argument> setToBeConstructed = new HashSet<>();
+            HashSet<Argument> setToBeConstructed = new HashSet<>();
             int m = 1; // m is used to check set bit in binary representation.
             // Print current subset
             for (int j = 0; j < n; j++) {
@@ -42,172 +42,122 @@ public class Setaf {
                 }
                 m = m << 1;
             }
-
             result.add(setToBeConstructed);
         }
-
         return result;
     }
 
 
     // the function of conflict free
-    public Set<Set<Argument>> getConflictFree() {
-        Set<Set<Argument>> subset = getSubset();
-        Set<Set<Argument>> remove_set = new LinkedHashSet<>();
-        for (Set<Argument> set : subset
-        ) {
-            for (Argument argument : set
-            ) {
-                for (Relation relation : mapOfRelation
-                ) {
-                    if (set.contains(relation.getAttacked()) && set.containsAll(relation.getSetOfAttacker())) {
-                        //subset.remove(set);   //ConcurrentModificationException (when iterate can not modify the element in set)
-                        remove_set.add(set);
-                    }
-                }
+    public HashSet<HashSet<Argument>> getConflictFree() {
+        HashSet<HashSet<Argument>> allSubsets = getSubset();
+        HashSet<HashSet<Argument>> result = new HashSet<>();
+        for (HashSet<Argument> X : allSubsets) {
+            Boolean IsXConflictFree = true;
+            for (Relation R : mapOfRelation) {
+                if (X.contains(R.getAttacked()) && X.containsAll(R.getSetOfAttacker()))
+                    IsXConflictFree = false;
             }
+            if (IsXConflictFree)
+                result.add(X);
         }
-        for (Set<Argument> set : remove_set
-        ) {
-            if (subset.contains(set)) {
-                subset.remove(set);
-            }
-        }
-        return subset;
+        return result;
     }
 
-    public Set<Set<Argument>> getAttackersOfArgument(HashSet<Relation> mapOfRelation, Argument a) {
-        //Set<Argument> attackersOfArgumentSet = new HashSet<>();
-        Set<Set<Argument>> set = new HashSet<>();
-        for (Relation relation : mapOfRelation
-        ) {
+    public HashSet<Relation> getAttackersOfArgument(Argument a) {
+        HashSet<Relation> set = new HashSet<>();
+        for (Relation relation : mapOfRelation) {
             if (relation.getAttacked().equals(a)) {
-                set.add(relation.getSetOfAttacker());
+                set.add(relation);
             }
-
         }
-
         return set;
-
-
     }
 
     // the function of getting admissible extension
-    public Set<Set<Argument>> getAdmissible() {
-        Set<Set<Argument>> conFreeSet = getConflictFree();
-        Set<Set<Argument>> admissible_set = new LinkedHashSet<>();
-        for (Set<Argument> set : conFreeSet
-        ) {
-            for (Argument argument : set
-            ) {
-                for (Relation relation : mapOfRelation
-                ) {
-                    if (relation.getAttacked().equals(argument)) {
-                        for (Argument argument1 : relation.getSetOfAttacker()
-                        ) {
-                            for (Relation r : mapOfRelation
-                            ) {
-                                if (r.getAttacked().equals(argument1)) {
-                                    Set<Set<Argument>> attackersOfArgument = getAttackersOfArgument(mapOfRelation, r.getAttacked());
-                                    //System.out.println(r.getAttacked()+"的攻击集合是："+attackersOfArgument);
-                                        if(set.containsAll(attackersOfArgument)){
-                                            admissible_set.add(set);
-                                        }
-                                    }
-                                }
+    public HashSet<HashSet<Argument>> getAdmissible() {
+        HashSet<HashSet<Argument>> admissible_set = new HashSet<>();
+        for (HashSet<Argument> C : getConflictFree()) {//[a,b]  c attack a   d attack b  b attack d
+            Boolean IsCAdmissible = true;
+            for (Argument c : C) {//a b
+                Boolean IsDefendedAgainstAllAttacks = true;
+                for (Relation R : getAttackersOfArgument(c)) {//d attack b
+                    Boolean IscDefendedAgainstR = false;
+                    for (Argument r : R.getSetOfAttacker())//d
+                        for (Relation C1 : getAttackersOfArgument(r)) { //
+                            if (C.containsAll(C1.getSetOfAttacker())) { //b
+                                IscDefendedAgainstR = true;
                             }
                         }
-                    }
+                    if (!IscDefendedAgainstR)
+                        IsDefendedAgainstAllAttacks = false;
                 }
+                if (!IsDefendedAgainstAllAttacks)
+                    IsCAdmissible = false;
             }
+            if (IsCAdmissible)
+                admissible_set.add(C);
+        }
         return admissible_set;
     }
 
     // the function of getting complete extension
-    public Set<Set<Argument>> getComplete() {
-        Set<Set<Argument>> admissibleSet = getAdmissible();
+    public HashSet<HashSet<Argument>> getComplete() {
+        HashSet<HashSet<Argument>> completeExtensions =  new HashSet<>();
+        for(HashSet<Argument> C : getAdmissible()){
+            Boolean IsComplete = true;
+            for(Argument c : NotInSet(C)){
+                Boolean IsDefendedByC = true;
+                for(Relation R : getAttackersOfArgument(c)){
+                    Boolean IsDefendedAgainstR = false;
+                    for(Argument r : R.getSetOfAttacker()){
+                        for(Relation C1 : getAttackersOfArgument(r)){
+                            if(C.containsAll(C1.getSetOfAttacker())){
+                                //It means C defends c against R
+                                IsDefendedAgainstR = true;
+                            }
+                        }
+                    }
+                    if(!IsDefendedAgainstR)
+                        IsDefendedByC = false;
+                }
 
+                if(IsDefendedByC)
+                    IsComplete=false;
+            }
+            if(IsComplete)
+                completeExtensions.add(C);
+        }
+        return completeExtensions;
+    }
 
-        return admissibleSet;
+    public HashSet<Argument> NotInSet(HashSet<Argument> C){
+        HashSet<Argument> result = new HashSet<>();
+        for(Argument a : setOfArguments){
+            if(!C.contains(a))
+                result.add(a);
+        }
+        return result;
     }
 
     // the function of getting preferred extension
-    public Set<Set<Argument>> getPreferred() {
-        Set<Set<Argument>> completeSet = getComplete();
+    public HashSet<HashSet<Argument>> getPreferred() {
+        HashSet<HashSet<Argument>> completeSet = getComplete();
 
 
         return completeSet;
     }
 
     // the function of getting grounded extension
-    public Set<Set<Argument>> getGrounded() {
-        Set<Set<Argument>> preferredSet = getPreferred();
+    public HashSet<HashSet<Argument>> getGrounded() {
+        HashSet<HashSet<Argument>> preferredSet = getPreferred();
 
 
         return preferredSet;
     }
 
 
-  /*  public HashSet<Set> getComplete_extension() {
-        //取出一个论证a,找到被a攻击的b,c, 找到被b或c攻击d
-        HashSet<Set> cmset = new HashSet<>();
-        //遍历argument集合
-        for (Argument argument : setOfArguments
-        ) {
-            HashSet<Argument> arguments_defend = new HashSet<>(); //cmset内存储的集合
-            HashSet<Argument> attack_argument = new HashSet<>();//attack_argument is a set attack argument a
-            for (Relation r : mapOfRelation
-            ) {
-                //System.out.println(r.getSetOfAttacker()+"attack\n"+r.getAttacked());
-                if (r.getAttacked() == argument) {
-                    for (Argument a : r.getSetOfAttacker()
-                    ) {
-                        attack_argument.add(a);
-                    }
-                }
 
-            }
-            HashSet<Argument> arguments_attacker = new HashSet<>();// arguments_attacker is a set attacked by argument a
-            for (Relation relation : mapOfRelation
-            ) {//找出被a攻击的bc
-                if (relation.getSetOfAttacker().contains(argument)) { //
-                    arguments_attacker.add(relation.getAttacked());//bc  the argument which attacker of a is added in arguments_attacker
-                }
-            }
-            if (arguments_attacker.containsAll(attack_argument)) {  //attack_arguemnt is a subset of arguments_attacker , means the argument which attack a all attacked by a,so a is safe.
-                System.out.println("集合的第一个元素:" + argument);
-                arguments_defend.add(argument);
-            }
-            if (arguments_defend.iterator().hasNext()) { // if arguments_defend is null, do not print,
-                //遍历bc
-                // System.out.println(arguments_defend.iterator().next());
-                for (Argument argument1 : arguments_attacker   //
-                ) {//找出被bc攻击的d
-                    System.out.println(argument1);
-                    for (Relation relation : mapOfRelation
-                    ) {
-                        //System.out.println(relation.getSetOfAttacker()+"attack:"+relation.getAttacked());
-                        //System.out.println(relation.getAttacked()+"的攻击者"+relation.getSetOfAttacker());
-                        if (relation.getSetOfAttacker().contains(argument1)) {//d is attacked by the set which contains b,c.  if a argument is attacked by arguments_attacker，
-                            {
-                                if (arguments_attacker.containsAll(relation.getSetOfAttacker()) && //and whole the arguments attacked this arguments is subset of arguments_attacker
-                                        !(attack_argument.contains(relation.getAttacked()))) {  // 攻击a的集合不包含 d
-                                    //System.out.println("第一个："+argument);
-                                    //System.out.println("被第一个攻击的："+arguments_attacker);
-                                    //System.out.println(relation.getAttacked()+"的攻击者："+relation.getSetOfAttacker());
-                                    //System.out.println(arguments_defend);
-                                    arguments_defend.add(relation.getAttacked());//ef;
-                                }
-                            }
-                        }
-                    }
-                }
-                cmset.add(arguments_defend);
-            }
-        }
-        return cmset;
-
-    }*/
 
     public Graph getGraph() {
         Graph graph = new SingleGraph("Setaf");

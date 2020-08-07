@@ -13,11 +13,11 @@ public class Tsetaf_function {
         //  type:0();1(];2[];3[)
         Setaf setaf = tsetaf.atTime(new Availability_interval(0, 130, 1));
         System.out.println(setaf);
-        //System.out.println(setaf.getComplete_extension());
-        System.out.println("all subsets:\n"+setaf.getSubset());
-        System.out.println("conflict free:\n"+setaf.getConflictFree());
-        System.out.println("Admissible:\n"+setaf.getAdmissible());
-      /*  int next = -1;
+        System.out.println("all subsets:\n" + setaf.getSubset());
+        System.out.println("Conflict free:\n" + setaf.getConflictFree());
+        System.out.println("Admissible:\n" + setaf.getAdmissible());
+        System.out.println("Complete:\n" +setaf.getComplete());
+      int next = -1;
         while (next != 0) {
             System.out.println("please select the function:");
             System.out.println("0-----exit");
@@ -61,34 +61,29 @@ public class Tsetaf_function {
                     System.out.println("please input the correct number:");
                     break;
             }
-        }*/
-/*
+        }
+
+        /*
         try {
             setaf.convertAspartix();
         } catch (IOException e) {
             e.printStackTrace();
         }
-
         System.out.println(setaf);
         System.out.println(tsetaf);
-
         try {
             setaf.convertAspartix();
         } catch (IOException e) {
             e.printStackTrace();
         }
-
         Graph G1 = tsetaf.getGraph();
         write(G1);
         Graph G2 = setaf.getGraph();
         write(G2);
         //   Viewer vTSETAF = G1.display();
         //Viewer vSETAF = G2.display();
-
         System.out.println(setaf.getHN_categoriser(10));*/
-
     }
-
 
     public static void write(Graph G) {
 
@@ -126,6 +121,4 @@ public class Tsetaf_function {
                         + "}"
         );
     }
-
-
 }
