@@ -10,13 +10,24 @@ public class Tsetaf_function {
     public static void main(String[] args) {
         Parser parser = new Parser();
         Tsetaf tsetaf = parser.Parse("/Users/zhujinlong/Downloads/TSETAF/file/TSETAF1.apx");
+        //Availability_interval availability_interval = new Availability_interval();
+        Scanner sc = new Scanner(System.in);
+        //availability_interval.setStart_point(sc.nextInt());
         //  type:0();1(];2[];3[)
-        Setaf setaf = tsetaf.atTime(new Availability_interval(0, 130, 1));
+        System.out.println("please input startpoint：");
+        int start_point = sc.nextInt();
+        System.out.println("please input endpoint：");
+        int end_point =sc.nextInt();
+        System.out.println("请输入type(0:(),1:(],2:[],3:[))：");
+        int type = sc.nextInt();
+        Setaf setaf = tsetaf.atTime(new Availability_interval(start_point,end_point,type));
         System.out.println(setaf);
         System.out.println("all subsets:\n" + setaf.getSubset());
-        System.out.println("Conflict free:\n" + setaf.getConflictFree());
-        System.out.println("Admissible:\n" + setaf.getAdmissible());
-        System.out.println("Complete:\n" +setaf.getComplete());
+        System.out.println("Conflict-free:\n" + setaf.getConflictFree());
+        System.out.println("Admissible extension:\n" + setaf.getAdmissible());
+        System.out.println("Complete extension:\n" +setaf.getComplete());
+        System.out.println("Preferred extension\n:"+setaf.getPreferred());
+        System.out.println("Grounded extension\n:"+setaf.getGrounded());
       int next = -1;
         while (next != 0) {
             System.out.println("please select the function:");

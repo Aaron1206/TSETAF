@@ -7,6 +7,9 @@ public class Availability_interval {
     type:0();1(];2[];3[)
     */
     private int type;
+    /*public Availability_interval(){
+
+    }*/
 
     public Availability_interval(int start_point, int end_point, int type) {
         this.start_point = start_point;

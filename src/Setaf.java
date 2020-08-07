@@ -103,38 +103,38 @@ public class Setaf {
 
     // the function of getting complete extension
     public HashSet<HashSet<Argument>> getComplete() {
-        HashSet<HashSet<Argument>> completeExtensions =  new HashSet<>();
-        for(HashSet<Argument> C : getAdmissible()){
+        HashSet<HashSet<Argument>> completeSet = new HashSet<>();
+        for (HashSet<Argument> C : getAdmissible()) {
             Boolean IsComplete = true;
-            for(Argument c : NotInSet(C)){
+            for (Argument c : NotInSet(C)) {
                 Boolean IsDefendedByC = true;
-                for(Relation R : getAttackersOfArgument(c)){
+                for (Relation R : getAttackersOfArgument(c)) {
                     Boolean IsDefendedAgainstR = false;
-                    for(Argument r : R.getSetOfAttacker()){
-                        for(Relation C1 : getAttackersOfArgument(r)){
-                            if(C.containsAll(C1.getSetOfAttacker())){
+                    for (Argument r : R.getSetOfAttacker()) {
+                        for (Relation C1 : getAttackersOfArgument(r)) {
+                            if (C.containsAll(C1.getSetOfAttacker())) {
                                 //It means C defends c against R
                                 IsDefendedAgainstR = true;
                             }
                         }
                     }
-                    if(!IsDefendedAgainstR)
+                    if (!IsDefendedAgainstR)
                         IsDefendedByC = false;
                 }
 
-                if(IsDefendedByC)
-                    IsComplete=false;
+                if (IsDefendedByC)
+                    IsComplete = false;
             }
-            if(IsComplete)
-                completeExtensions.add(C);
+            if (IsComplete)
+                completeSet.add(C);
         }
-        return completeExtensions;
+        return completeSet;
     }
 
-    public HashSet<Argument> NotInSet(HashSet<Argument> C){
+    public HashSet<Argument> NotInSet(HashSet<Argument> C) {
         HashSet<Argument> result = new HashSet<>();
-        for(Argument a : setOfArguments){
-            if(!C.contains(a))
+        for (Argument a : setOfArguments) {
+            if (!C.contains(a))
                 result.add(a);
         }
         return result;
@@ -142,21 +142,34 @@ public class Setaf {
 
     // the function of getting preferred extension
     public HashSet<HashSet<Argument>> getPreferred() {
-        HashSet<HashSet<Argument>> completeSet = getComplete();
+        HashSet<HashSet<Argument>> preferredSet = new HashSet<>();
+        for (HashSet<Argument> C : getAdmissible()
+        ) {
 
-
-        return completeSet;
-    }
-
-    // the function of getting grounded extension
-    public HashSet<HashSet<Argument>> getGrounded() {
-        HashSet<HashSet<Argument>> preferredSet = getPreferred();
-
+        }
 
         return preferredSet;
     }
 
+    // the function of getting grounded extension
+    public HashSet<HashSet<Argument>> getGrounded() {
 
+        HashSet<HashSet<Argument>> groundedSet = new HashSet<>();
+        for (HashSet<Argument> C : getComplete()
+        ) {
+            Boolean IsCGrounedeSet = true;
+            for (HashSet<Argument> D : getComplete()
+            ) {
+                if (!(D.containsAll(C))) {
+                    IsCGrounedeSet = false;
+                }
+            }
+            if (IsCGrounedeSet) {
+                groundedSet.add(C);
+            }
+        }
+        return groundedSet;
+    }
 
 
     public Graph getGraph() {
