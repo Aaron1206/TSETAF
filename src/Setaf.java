@@ -143,11 +143,19 @@ public class Setaf {
     // the function of getting preferred extension
     public HashSet<HashSet<Argument>> getPreferred() {
         HashSet<HashSet<Argument>> preferredSet = new HashSet<>();
-        for (HashSet<Argument> C : getAdmissible()
+        HashSet<HashSet<Argument>> complete = getComplete();
+        for (HashSet<Argument> C : complete
         ) {
-
+            Boolean IsCMaximal = true;
+            HashSet<HashSet<Argument>> complete1 = getComplete();
+            complete1.remove(C);
+            if ((complete1.containsAll(C))) {
+                IsCMaximal = false;
+            }
+            if (IsCMaximal) {
+                preferredSet.add(C);
+            }
         }
-
         return preferredSet;
     }
 
