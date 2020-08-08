@@ -228,7 +228,7 @@ public class Setaf {
         bw.close();
     }
 
-    public HashMap<Argument, Double> getHN_categoriser(int numberOfsteps) {
+    public HashMap<Argument, Double> getNh_categoriser(int numberOfsteps) {
         HashMap<Argument, Double> map = new HashMap<>();
 
         //We give a score of 1 to each argument at step 1

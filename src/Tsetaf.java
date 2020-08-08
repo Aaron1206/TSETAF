@@ -62,7 +62,15 @@ public class Tsetaf {
         setOfTime.get(a).getTime_list().add(b);
     }
 
-    public Setaf atTime(Availability_interval availability_interval) {
+    public Setaf atTime() {
+        Scanner sc = new Scanner(System.in);
+        System.out.println("please input startpoint：");
+        int start_point = sc.nextInt();
+        System.out.println("please input endpoint：");
+        int end_point =sc.nextInt();
+        System.out.println("请输入type(0:(),1:(],2:[],3:[))：");
+        int type = sc.nextInt();
+        Availability_interval availability_interval = new Availability_interval(start_point,end_point,type);
         Setaf setaf = new Setaf();
         HashMap<String, HashSet<String>> Relation = new HashMap<>();
         for (Argument argument : setOfTime.keySet()) {
