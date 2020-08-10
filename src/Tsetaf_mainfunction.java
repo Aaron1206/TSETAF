@@ -6,22 +6,19 @@ import java.io.IOException;
 import java.text.Format;
 import java.util.Scanner;
 
-public class Tsetaf_function {
+public class Tsetaf_mainfunction {
     public static void main(String[] args) {
         Parser parser = new Parser();
-        Tsetaf tsetaf = parser.Parse("/Users/zhujinlong/Downloads/TSETAF/file/TSETAF1.apx");
-      /*  Setaf setaf = tsetaf.atTime(new Availability_interval(0, 130, 1));
-        System.out.println(tsetaf);
-        System.out.println(setaf);
-        System.out.println("all subsets:\n"+setaf.getSubset());
-        System.out.println("conflict free:\n"+setaf.getConflictFree());
-        System.out.println("Admissible:\n"+setaf.getAdmissible());
-        System.out.println("Compete:\n"+setaf.getComplete());
-        System.out.println("preferred:\n"+setaf.getPreferred());
-        System.out.println("grounded:\n"+setaf.getGrounded());*/
+        System.out.println("******** Welcome to use T-SETAF system *********");
+        System.out.println("Please input the file path:");
+        Scanner scanner3 = new Scanner(System.in);
+        String filePath = scanner3.next();
+        String path =filePath;
+        //"/Users/zhujinlong/Downloads/TSETAF/file/TSETAF1.apx"
+        Tsetaf tsetaf = parser.Parse(path);
        int next = -1;
         while (next != 0) {
-            System.out.println("******** Welcome to use T-SETAF system *********");
+
             System.out.println("Please select the functions:");
             System.out.println("0. exit");
             System.out.println("1. generate tsetaf");
@@ -35,7 +32,7 @@ public class Tsetaf_function {
                         System.out.println(tsetaf);
                         System.out.println("Please select the functions:");
                         System.out.println("0. exist");
-                        System.out.println("1. generate tsetaf graph");
+                        System.out.println("1. show tsetaf graph");
                         System.out.println("2. generate setaf ");
                         Scanner scanner1 = new Scanner(System.in);
                         next = scanner1.nextInt();
@@ -46,6 +43,7 @@ public class Tsetaf_function {
                                 Graph G1 = tsetaf.getGraph();
                                 write(G1);
                                 Viewer vTSETAF = G1.display();
+                                vTSETAF.setCloseFramePolicy(Viewer.CloseFramePolicy.HIDE_ONLY);
                                 break;
                             case 2:
                                 Setaf setaf = tsetaf.atTime();
@@ -53,7 +51,7 @@ public class Tsetaf_function {
                                     System.out.println(setaf);
                                     System.out.println("Please select the functions:");
                                     System.out.println("0. exist");
-                                    System.out.println("1. generate setaf graph");
+                                    System.out.println("1. show setaf graph");
                                     System.out.println("2. show setaf HN-categoriser");
                                     System.out.println("3. generate setaf .apx file");
                                     System.out.println("4. get extensions:");
@@ -66,6 +64,7 @@ public class Tsetaf_function {
                                             Graph G2 = setaf.getGraph();
                                             write(G2);
                                             Viewer vSETAF = G2.display();
+                                            vSETAF.setCloseFramePolicy(Viewer.CloseFramePolicy.HIDE_ONLY);
                                             break;
                                         case 2:
                                             System.out.println("Nh-categoriser:\n" + setaf.getNh_categoriser(10));
