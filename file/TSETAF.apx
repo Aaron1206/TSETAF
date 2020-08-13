@@ -7,13 +7,13 @@ time_list(a,L1)
 mem1(L1,(0,80))
 
 time_list(b,L2)
-mem1(L2,(0,80))
+mem1(L2,(20,100)
 
 time_list(c,L3)
-mem1(L3,(0,80))
+mem1(L3,(50,120))
 
 time_list(d,L4)
-mem1(L4,(0,80))
+mem1(L4,(30,60))
 
 att(r1,b)
 mem2(r1,a)

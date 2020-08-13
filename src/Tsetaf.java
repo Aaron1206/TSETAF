@@ -1,6 +1,5 @@
 import org.graphstream.graph.Graph;
 import org.graphstream.graph.implementations.SingleGraph;
-
 import java.util.*;
 
 public class Tsetaf {
@@ -61,55 +60,6 @@ public class Tsetaf {
             setOfTime.put(a, new Time_list());
         setOfTime.get(a).getTime_list().add(b);
     }
-
- /*   public Setaf atTime(Availability_interval availability_interval) {
-        Setaf setaf = new Setaf();
-        HashMap<String, HashSet<String>> Relation = new HashMap<>();
-        for (Argument argument : setOfTime.keySet()) {
-            ArrayList<Availability_interval> time_list = setOfTime.get(argument).getTime_list();
-            for (Availability_interval interval : time_list
-            ) {//a b c d        [c,d]      type:0();1(];2[];3[)
-                if (availability_interval.getType() == 0 && (
-                        (interval.getType() == 0 && !((interval.getEnd_point() <= availability_interval.getStart_point()) || (interval.getStart_point() >= availability_interval.getEnd_point()))
-                                || (interval.getType() == 1 && !((interval.getEnd_point() <= availability_interval.getStart_point()) || (interval.getStart_point() >= availability_interval.getEnd_point())))
-                                || (interval.getType() == 2 && !((interval.getEnd_point() <= availability_interval.getStart_point()) || (interval.getStart_point() >= availability_interval.getEnd_point())))
-                                || (interval.getType() == 3 && !((interval.getEnd_point() <= availability_interval.getStart_point()) || (interval.getStart_point() >= availability_interval.getEnd_point())))
-                        ))) {
-                    setaf.addArgument(argument);
-                } else if (availability_interval.getType() == 1 && (
-                        (interval.getType() == 0 && !((interval.getEnd_point() <= availability_interval.getStart_point()) || (interval.getStart_point() >= availability_interval.getEnd_point())))
-                                || (interval.getType() == 1 && !((interval.getEnd_point() <= availability_interval.getStart_point()) || (interval.getStart_point() >= availability_interval.getEnd_point())))
-                                || (interval.getType() == 2 && !((interval.getEnd_point() <= availability_interval.getStart_point()) || (interval.getStart_point() > availability_interval.getEnd_point())))
-                                || (interval.getType() == 3 && !((interval.getEnd_point() <= availability_interval.getStart_point()) || (interval.getStart_point() > availability_interval.getEnd_point())))
-                )) {
-                    setaf.addArgument(argument);
-                } else if (availability_interval.getType() == 2 && (
-                        (interval.getType() == 0 && !((interval.getEnd_point() <= availability_interval.getStart_point()) || (interval.getStart_point() >= availability_interval.getEnd_point())))
-                                || (interval.getType() == 1 && !((interval.getEnd_point() < availability_interval.getStart_point()) || (interval.getStart_point() >= availability_interval.getEnd_point())))
-                                || (interval.getType() == 2 && !((interval.getEnd_point() < availability_interval.getStart_point()) || (interval.getStart_point() > availability_interval.getEnd_point())))
-                                || (interval.getType() == 3 && !((interval.getEnd_point() <= availability_interval.getStart_point()) || (interval.getStart_point() > availability_interval.getEnd_point())))
-                )) {
-                    setaf.addArgument(argument);
-                } else if (availability_interval.getType() == 3 && (
-                        (interval.getType() == 0 && !((interval.getEnd_point() <= availability_interval.getStart_point()) || (interval.getStart_point() > availability_interval.getEnd_point())))
-                                || (interval.getType() == 1 && !((interval.getEnd_point() < availability_interval.getStart_point()) || (interval.getStart_point() >= availability_interval.getEnd_point())))
-                                || (interval.getType() == 2 && !((interval.getEnd_point() < availability_interval.getStart_point()) || (interval.getStart_point() >= availability_interval.getEnd_point())))
-                                || (interval.getType() == 3 && !((interval.getEnd_point() <= availability_interval.getStart_point()) || (interval.getStart_point() >= availability_interval.getEnd_point())))
-                )) {
-                    setaf.addArgument(argument);
-                }
-            }
-            for (
-                    Relation relation : mapOfRelation) {
-                if (setaf.getSetOfArguments().contains(relation.getAttacked())) {
-                    if (setaf.getSetOfArguments().containsAll(relation.getSetOfAttacker())) {
-                        setaf.addRelation(relation);
-                    }
-                }
-            }
-        }
-        return setaf;
-    }*/
 
 
 public Setaf atTime() {

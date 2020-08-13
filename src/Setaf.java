@@ -1,6 +1,5 @@
 import org.graphstream.graph.Graph;
 import org.graphstream.graph.implementations.SingleGraph;
-
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -77,15 +76,15 @@ public class Setaf {
     // the function of getting admissible extension
     public HashSet<HashSet<Argument>> getAdmissible() {
         HashSet<HashSet<Argument>> admissible_set = new HashSet<>();
-        for (HashSet<Argument> C : getConflictFree()) {//[a,b]  c attack a   d attack b  b attack d
+        for (HashSet<Argument> C : getConflictFree()) {
             Boolean IsCAdmissible = true;
-            for (Argument c : C) {//a b
+            for (Argument c : C) {
                 Boolean IsDefendedAgainstAllAttacks = true;
-                for (Relation R : getAttackersOfArgument(c)) {//d attack b
+                for (Relation R : getAttackersOfArgument(c)) {
                     Boolean IscDefendedAgainstR = false;
-                    for (Argument r : R.getSetOfAttacker())//d
-                        for (Relation C1 : getAttackersOfArgument(r)) { //
-                            if (C.containsAll(C1.getSetOfAttacker())) { //b
+                    for (Argument r : R.getSetOfAttacker())
+                        for (Relation C1 : getAttackersOfArgument(r)) {
+                            if (C.containsAll(C1.getSetOfAttacker())) {
                                 IscDefendedAgainstR = true;
                             }
                         }

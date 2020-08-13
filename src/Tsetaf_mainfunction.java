@@ -1,9 +1,6 @@
 import org.graphstream.graph.Graph;
 import org.graphstream.ui.view.Viewer;
-
-import java.io.File;
 import java.io.IOException;
-import java.text.Format;
 import java.util.Scanner;
 
 public class Tsetaf_mainfunction {
